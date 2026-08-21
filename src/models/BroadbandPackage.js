@@ -1,9 +1,9 @@
-// Source: API_Params_SLTOMNI_V2_0_1.xlsx, sheets "75" (A75 GetBBPackages) and "76" (A76 GetBBPackageDetails)
+// Source: API_Params_SLTOMNI_V2_0_1.xlsx, sheets "75" (A75 listBBPackages) and "76" (A76 listBBPackageDetails)
 // Legacy endpoints:
-//   GET /api/BBExternal/GetBBPackages?type=ADSL&package=WEB FAMILY PLUS
-//   GET /api/BBExternal/GetBBPackageDetails?code=ADSL-WFP
-// One collection backs both APIs: GetBBPackages only needs code/name/type/tier,
-// GetBBPackageDetails needs the full pricing/data fields too.
+//   GET /api/BBExternal/listBBPackages?type=ADSL&package=WEB FAMILY PLUS
+//   GET /api/BBExternal/listBBPackageDetails?code=ADSL-WFP
+// One collection backs both APIs: listBBPackages only needs code/name/type/tier,
+// listBBPackageDetails needs the full pricing/data fields too.
 const mongoose = require('mongoose');
 
 const broadbandPackageSchema = new mongoose.Schema(
