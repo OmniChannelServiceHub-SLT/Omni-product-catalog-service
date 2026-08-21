@@ -1,5 +1,5 @@
-// Source: API_Params_SLTOMNI_V2_0_1.xlsx, sheet "A61" (log seq A62, GetVASDataBundlePackages)
-// Legacy endpoint: GET /api/BBVAS/GetVASDataBundlePackages?subscriberID=...&packageName=...
+// Source: API_Params_SLTOMNI_V2_0_1.xlsx, sheet "A61" (log seq A62, listVASDataBundlePackages)
+// Legacy endpoint: GET /api/BBVAS/listVASDataBundlePackages?subscriberID=...&packageName=...
 const mongoose = require('mongoose');
 
 const vasAddonSchema = new mongoose.Schema(
