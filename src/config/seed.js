@@ -39,7 +39,7 @@ const splitPairs = (arr) => arr.map((s) => s.split('|'));
 
 const broadbandPackages = [
   ...toPackages(splitPairs(downgrades), 1),
-  // Base package - the only one we have full pricing detail for (sheet 76, GetBBPackageDetails sample).
+  // Base package - the only one we have full pricing detail for (sheet 76, listBBPackageDetails sample).
   {
     packageName: 'Web Family Plus',
     packageCode: 'ADSL-WFP',
