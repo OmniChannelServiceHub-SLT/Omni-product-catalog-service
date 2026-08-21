@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 
-const vasDataBundlePackagesRoutes = require('./APIs/getVASDataBundlePackages/routes/vasDataBundlePackagesRoutes');
-const bbPackagesRoutes = require('./APIs/getBBPackages/routes/bbPackagesRoutes');
-const bbPackageDetailsRoutes = require('./APIs/getBBPackageDetails/routes/bbPackageDetailsRoutes');
+const vasDataBundlePackagesRoutes = require('./APIs/listVASDataBundlePackages/routes/vasDataBundlePackagesRoutes');
+const bbPackagesRoutes = require('./APIs/listBBPackages/routes/bbPackagesRoutes');
+const bbPackageDetailsRoutes = require('./APIs/listBBPackageDetails/routes/bbPackageDetailsRoutes');
 
 const app = express();
 
