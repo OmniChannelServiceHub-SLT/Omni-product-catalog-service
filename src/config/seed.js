@@ -1,79 +1,67 @@
 // Run with: npm run seed
 // Populates product_catalog_inventory_db with the sample data pulled out of
-// API_Params_SLTOMNI_V2_0_1.xlsx (sheets A61, 75, 76) so the 3 APIs return real data
-// instead of empty arrays. Safe to re-run - it clears and re-inserts each time.
+// API_Params_SLTOMNI_V2_0_1.xlsx, now stored in the 2 TMF-named models
+// instead of 4 separate business-named collections. Safe to re-run - it
+// clears and re-inserts each time.
 require('dotenv').config();
 const mongoose = require('mongoose');
 const connectDB = require('./db');
-const VASAddon = require('../models/VASAddon');
-const BroadbandPackage = require('../models/BroadbandPackage');
-const PackageCatalogItem = require('../models/PackageCatalogItem');
-const SubscriberUsageSnapshot = require('../models/SubscriberUsageSnapshot');
+const TMF620_ProductOffering = require('../models/TMF620_productOffering');
+const TMF637_Product = require('../models/TMF637_product');
 
+// ---- vasAddon (source: sheet "A61", log seq A62) ----
 const vasAddons = [
-  // category: Home Schooling & WFH
-  { category: 'Home Schooling & WFH', addonId: 2, name: 'Meet Lite (Zoom,Teams,+)', description: '30 GB', postprice: '195', preprice: '195', taxValue: '19.89624', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/MeetLite.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
-  { category: 'Home Schooling & WFH', addonId: 3, name: 'Meet Max (Zoom,Teams,+)', description: '100 GB', postprice: '490', preprice: '490', taxValue: '49.99568', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/MeetMax.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
-  // category: LMS
-  { category: 'LMS', addonId: 4, name: 'LMS Lite(akazaLMS & More)', description: '30 GB', postprice: '195', preprice: '195', taxValue: '19.89624', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/EduLite.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
-  { category: 'LMS', addonId: 5, name: 'LMS Max (akazaLMS & More)', description: '100 GB', postprice: '490', preprice: '490', taxValue: '49.99568', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/EduMax.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
-  // category: Entertainment Unlimited
-  { category: 'Entertainment Unlimited', addonId: 7, name: 'Entertainment Combo Pack', description: 'Unlimited', postprice: '1990', preprice: '1990', taxValue: '203.04369', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/VASEnt.png', colorCode: 'A1B2C3', payable: false, prePaidAllowed: true, postPaidAllowed: true },
-  { category: 'Entertainment Unlimited', addonId: 8, name: 'PeoTV Go', description: 'Unlimited', postprice: '249', preprice: '249', taxValue: '25.40597', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/PeoTVGo.jpg', colorCode: 'A1B2C3', payable: false, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'Home Schooling & WFH', packageId: '2', name: 'Meet Lite (Zoom,Teams,+)', description: '30 GB', prePrice: '195', postPrice: '195', taxValue: '19.89624', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/MeetLite.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'Home Schooling & WFH', packageId: '3', name: 'Meet Max (Zoom,Teams,+)', description: '100 GB', prePrice: '490', postPrice: '490', taxValue: '49.99568', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/MeetMax.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'LMS', packageId: '4', name: 'LMS Lite(akazaLMS & More)', description: '30 GB', prePrice: '195', postPrice: '195', taxValue: '19.89624', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/EduLite.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'LMS', packageId: '5', name: 'LMS Max (akazaLMS & More)', description: '100 GB', prePrice: '490', postPrice: '490', taxValue: '49.99568', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/EduMax.jpeg', colorCode: 'A1B2C3', payable: true, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'Entertainment Unlimited', packageId: '7', name: 'Entertainment Combo Pack', description: 'Unlimited', prePrice: '1990', postPrice: '1990', taxValue: '203.04369', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/VASEnt.png', colorCode: 'A1B2C3', payable: false, prePaidAllowed: true, postPaidAllowed: true },
+  { offeringType: 'vasAddon', category: 'Entertainment Unlimited', packageId: '8', name: 'PeoTV Go', description: 'Unlimited', prePrice: '249', postPrice: '249', taxValue: '25.40597', iconUrl: 'http://internetvasmedia.slt.lk/media/VASBundles/PeoTVGo.jpg', colorCode: 'A1B2C3', payable: false, prePaidAllowed: true, postPaidAllowed: true },
 ];
 
-// Downgrades (tier < base), base package, then Upgrades (tier > base) - order taken
-// straight from the "Downgrades"/"Upgrades" arrays in sheet 75, all type ADSL.
+// ---- broadbandPackage (source: sheets "75" / "76") ----
 const downgrades = ['Abhimana|ADSL-AB', 'Entree|ADSL-ENT', 'Student 01|ADSL-ST1', 'Student 02|ADSL-ST2', 'Web Lite|ADSL-WLT', 'Web Starter|ADSL-WS', 'Web Pal|ADSL-WP'];
-const base = 'Web Family Plus|ADSL-WFP';
 const upgrades = ['Web Family Xtra|ADSL-WFX', 'Web Pro|ADSL-WPR', 'Web Master|ADSL-WM', 'Web Champ|ADSL-WC', 'Web Life|ADSL-WL', 'Web Inspire|ADSL-WI', 'Web Premier|ADSL-WPM', 'Web Family Active|ADSL-WFA', 'Web Booster|ADSL-WB', 'Any Joy|ADSL-AJOY', 'Any Beat|ADSL-ABEA', 'Any Flix|ADSL-AFLI', 'Any Blaze|ADSL-ABLA', 'Any Tide|ADSL-ATID', 'Any Spike|ADSL-ASPI', 'Any Storm|ADSL-ASTO', 'Any Glam|ADSL-AGLA', 'Any Delight|ADSL-ADEL', 'Any Xtreme|ADSL-AXTR'];
 
-function toPackages(list, startTier) {
-  return list.map(([name, code], i) => ({
-    packageName: name,
-    packageCode: code,
-    type: 'ADSL',
-    tier: startTier + i,
-  }));
+function toOfferings(list, startTier) {
+  return list.map((s, i) => {
+    const [name, code] = s.split('|');
+    return { offeringType: 'broadbandPackage', packageId: code, name, packageType: 'ADSL', tier: startTier + i };
+  });
 }
 
-const splitPairs = (arr) => arr.map((s) => s.split('|'));
-
 const broadbandPackages = [
-  ...toPackages(splitPairs(downgrades), 1),
-  // Base package - the only one we have full pricing detail for (sheet 76, listBBPackageDetails sample).
+  ...toOfferings(downgrades, 1),
   {
-    packageName: 'Web Family Plus',
-    packageCode: 'ADSL-WFP',
-    type: 'ADSL',
+    offeringType: 'broadbandPackage',
+    packageId: 'ADSL-WFP',
+    name: 'Web Family Plus',
+    packageType: 'ADSL',
     tier: downgrades.length + 1,
     monthlyRental: 1490,
     standardGB: 36,
     freeGB: 54,
   },
-  ...toPackages(splitPairs(upgrades), downgrades.length + 2),
+  ...toOfferings(upgrades, downgrades.length + 2),
 ];
 
-// Real sample from sheet "49" (listAdvancedReportingPackage / A49).
+// ---- advancedReporting (source: sheet "49", real sample) ----
 const advancedReportingPackages = [
-  { catalogType: 'advancedReporting', packageId: '1', packageName: 'Monthly Subscription', packageInfo: '40 LKR', prePrice: '40', postPrice: '40', taxValue: '4.08128' },
-  { catalogType: 'advancedReporting', packageId: '2', packageName: 'Annual Subscription', packageInfo: '400 LKR', prePrice: '400', postPrice: '400', taxValue: '40.8128' },
+  { offeringType: 'advancedReporting', packageId: '1', name: 'Monthly Subscription', description: '40 LKR', prePrice: '40', postPrice: '40', taxValue: '4.08128' },
+  { offeringType: 'advancedReporting', packageId: '2', name: 'Annual Subscription', description: '400 LKR', prePrice: '400', postPrice: '400', taxValue: '40.8128' },
 ];
 
-// PLACEHOLDER - no sample response was captured for these two in the source
-// sheet (createDataGiftPackages / A57, listDataGiftPackagesMobile / A65).
-// Same shape as advancedReportingPackages above since they're the same BBVAS
-// "list of packages" family - replace with the real catalog once available.
+// ---- dataGift / dataGiftMobile - PLACEHOLDER, no sample response in source sheet ----
 const dataGiftPackages = [
-  { catalogType: 'dataGift', packageId: '1', packageName: '1 GB Data Gift', packageInfo: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
-  { catalogType: 'dataGift', packageId: '2', packageName: '5 GB Data Gift', packageInfo: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
+  { offeringType: 'dataGift', packageId: '1', name: '1 GB Data Gift', description: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
+  { offeringType: 'dataGift', packageId: '2', name: '5 GB Data Gift', description: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
 ];
 const dataGiftPackagesMobile = [
-  { catalogType: 'dataGiftMobile', packageId: '1', packageName: '1 GB Mobile Data Gift', packageInfo: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
-  { catalogType: 'dataGiftMobile', packageId: '2', packageName: '5 GB Mobile Data Gift', packageInfo: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
+  { offeringType: 'dataGiftMobile', packageId: '1', name: '1 GB Mobile Data Gift', description: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
+  { offeringType: 'dataGiftMobile', packageId: '2', name: '5 GB Mobile Data Gift', description: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
 ];
 
-// Real sample from sheet "48" (createMyPackage / A48), subscriberID 94382222802.
+// ---- myPackage (source: sheet "48", real sample, subscriberID 94382222802) ----
 const myPackageSnapshots = [
   {
     kind: 'myPackage',
@@ -90,7 +78,7 @@ const myPackageSnapshots = [
   },
 ];
 
-// Real sample from sheet "78" (listDashboardVASBundles / A78), subscriberID cen2431747.
+// ---- vasDashboard (source: sheet "78", real sample, subscriberID cen2431747) ----
 const vasDashboardSnapshots = [
   {
     kind: 'vasDashboard',
@@ -110,24 +98,17 @@ const vasDashboardSnapshots = [
 async function seed() {
   await connectDB();
 
-  await VASAddon.deleteMany({});
-  await VASAddon.insertMany(vasAddons);
-  console.log(`Seeded ${vasAddons.length} VAS addons.`);
+  await TMF620_ProductOffering.deleteMany({});
+  const offerings = [...vasAddons, ...broadbandPackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
+  await TMF620_ProductOffering.insertMany(offerings);
+  console.log(`Seeded ${offerings.length} TMF620_ProductOffering documents.`);
 
-  await BroadbandPackage.deleteMany({});
-  await BroadbandPackage.insertMany(broadbandPackages);
-  console.log(`Seeded ${broadbandPackages.length} broadband packages.`);
+  await TMF637_Product.deleteMany({});
+  const products = [...myPackageSnapshots, ...vasDashboardSnapshots];
+  await TMF637_Product.insertMany(products);
+  console.log(`Seeded ${products.length} TMF637_Product documents.`);
 
-  await PackageCatalogItem.deleteMany({});
-  await PackageCatalogItem.insertMany([...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile]);
-  console.log(`Seeded ${advancedReportingPackages.length + dataGiftPackages.length + dataGiftPackagesMobile.length} package catalog items.`);
-
-  await SubscriberUsageSnapshot.deleteMany({});
-  await SubscriberUsageSnapshot.insertMany([...myPackageSnapshots, ...vasDashboardSnapshots]);
-  console.log(`Seeded ${myPackageSnapshots.length + vasDashboardSnapshots.length} subscriber usage snapshots.`);
-
-  console.log('Done. Only ADSL-WFP has real monthlyRental/standardGB/freeGB values -');
-  console.log('fill the rest in via Mongo Compass/Atlas once you have the real figures.');
+  console.log('Done. Only ADSL-WFP has real monthlyRental/standardGB/freeGB values.');
   console.log('dataGiftPackages/dataGiftPackagesMobile are placeholder data - no real sample existed in the source sheet.');
 
   await mongoose.disconnect();
