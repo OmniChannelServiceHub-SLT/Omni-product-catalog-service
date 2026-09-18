@@ -1,24 +1,24 @@
-const { listBBPackageDetails: fetchBBPackageDetails } = require('../services/bbPackageDetailsService');
-const { success, failure } = require('../../../middleware/response');
+const { listBBPackageDetails } = require('../services/bbPackageDetailsService');
+const { mapBBPackageDetails } = require('../mappers/bbPackageDetailsMapper');
+const { sendResource, sendError } = require('../../../middleware/tmfResponse');
 
-async function listBBPackageDetails(req, res) {
+async function listBBPackageDetailsHandler(req, res) {
   try {
     const { code } = req.query;
-
     if (!code) {
-      return failure(res, 400, 'code query parameter is required');
+      return sendError(res, 400, 'MissingParameter', 'code query parameter is required');
     }
 
-    const dataBundle = await fetchBBPackageDetails(code);
-    if (!dataBundle) {
-      return failure(res, 404, `No package found for code=${code}`);
+    const offering = await listBBPackageDetails(code);
+    if (!offering) {
+      return sendError(res, 404, 'NotFound', `No package found for code=${code}`);
     }
 
-    return success(res, dataBundle);
+    return sendResource(res, mapBBPackageDetails(offering));
   } catch (err) {
     console.error('listBBPackageDetails failed:', err);
-    return failure(res, 500, 'Failed to fetch BB package details', err.message);
+    return sendError(res, 500, 'InternalError', 'Failed to fetch BB package details');
   }
 }
 
-module.exports = { listBBPackageDetails };
+module.exports = { listBBPackageDetails: listBBPackageDetailsHandler };
