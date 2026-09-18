@@ -1,79 +1,70 @@
 # Omni Product Catalog Service
 
-Product Catalog & Inventory Service (TMF620) for the Omni-Channel microservices
-project. Owns broadband package data and VAS (value-added service) addon data,
-re-implementing 3 legacy mySLT APIs as TMF-aligned, database-backed endpoints.
+Product Catalog & Inventory microservice for the Omni-Channel project, owned
+by the Product Catalog and Inventory team. Re-implements legacy mySLT APIs
+(broadband packages, VAS add-ons, data gift packages, subscriber usage) as
+TMF-aligned, database-backed endpoints, following TM Forum Open API
+standards (TMF620 Product Catalog Management, TMF637 Product Inventory
+Management).
 
-## The 3 APIs in this service
+## What this service owns
 
-| # | Legacy API | TMF Method | Endpoint |
-|---|---|---|---|
-| 1 | GetVASDataBundlePackages | listVASDataBundlePackages | `GET /internal-api/product-catalog/v1/vasDataBundlePackages` |
-| 2 | GetBBPackages | listBBPackages | `GET /internal-api/product-catalog/v1/bbPackages?type=ADSL&package=WEB FAMILY PLUS` |
-| 3 | GetBBPackageDetails | listBBPackageDetails | `GET /internal-api/product-catalog/v1/bbPackageDetails?code=ADSL-WFP` |
+- Broadband package catalog and upgrade/downgrade logic
+- VAS (value-added service) add-on catalog
+- Data gift package catalogs (standard and mobile)
+- Advanced reporting package catalog
+- Per-subscriber usage snapshots (main package usage and VAS dashboard usage)
 
-All 3 only read from this service's own MongoDB database - no synchronous calls
-to any other microservice, per the assignment rules.
+Each API reads only from this service's own MongoDB database - no
+synchronous calls to any other microservice.
+
+## Architecture
+
+- **Models** (`src/models/`) - named after the TMF resource they represent,
+  not the business feature: `TMF620_productOffering.js` for catalog items,
+  `TMF637_product.js` for usage snapshots. One collection per model,
+  discriminated by a type field, instead of one collection per feature.
+- **Mappers** (`src/mappers/` and each API's own `mappers/` folder) - convert
+  data into the TMF-aligned response shape (id/href/@type, characteristic
+  arrays for anything without a fixed TMF field) before it's sent.
+- **Services** - read from the database, no business logic changes from the
+  legacy behaviour.
+- **Controllers** - call the service, pass the result through the mapper,
+  send it via the shared TMF response helper.
+- **Responses** - no custom envelope. Successful responses return the TMF
+  resource directly; errors follow TM Forum's standard Error shape
+  (`code`/`reason`/`message`/`status`).
 
 ## Setup
 
-1. Install dependencies:
-   ```
-   npm install
-   ```
-2. Copy `.env.example` to `.env` (already done in this generated project) and
-   double check the `MONGODB_URI` and `PORT` match what's in the team's
-   MongoDB/env docs for the **Product Catalog & Inventory** service (port 3005).
-3. Seed the database with sample data pulled from the API params sheet:
-   ```
-   npm run seed
-   ```
-4. Start the service:
-   ```
-   npm run dev
-   ```
-   You should see `MongoDB connected` and `running on http://localhost:3005`.
+1. `npm install`
+2. Copy `.env.example` to `.env` and confirm `MONGODB_URI` / `PORT` match the
+   team's assigned values for this service (port 3005).
+3. `npm run seed` - populates the database with sample catalog and usage data.
+4. `npm run dev` - starts the service on `http://localhost:3005`.
 
-## Try it without the gateway yet
+## Testing
 
-You don't need the API Gateway or IAM service running to build and test these
-3 endpoints on their own - just hit them directly with Postman:
+Each endpoint can be tested directly against this service (no gateway or
+IAM needed), or through the API Gateway with a Bearer token once that's
+wired up. Base paths:
 
-```
-GET http://localhost:3005/internal-api/product-catalog/v1/vasDataBundlePackages
-GET http://localhost:3005/internal-api/product-catalog/v1/bbPackages?type=ADSL&package=WEB FAMILY PLUS
-GET http://localhost:3005/internal-api/product-catalog/v1/bbPackageDetails?code=ADSL-WFP
-```
+- TMF620 (Product Catalog Management): `/tmf-api/productCatalogManagement/v4`
+- TMF637 (Product Inventory Management): `/tmf-api/productInventoryManagement/v4`
 
-The gateway + IAM only matter once the team wants to test the *whole* flow
-(client -> gateway -> auth check -> this service), which is a later step.
+## Notes on data completeness
 
-## Data notes
-
-- `npm run seed` only has real pricing (`monthlyRental`, `standardGB`, `freeGB`)
-  for package `ADSL-WFP` (Web Family Plus), taken from the one sample response
-  in the params sheet. Every other seeded package has those fields as `null`
-  until the real figures are available - fill them in via MongoDB
-  Compass/Atlas or extend the seed script.
-- VAS addon data (Meet Lite/Max, LMS Lite/Max, Entertainment Combo, PeoTV Go)
-  is seeded with the real values from the params sheet.
+- Only broadband package `ADSL-WFP` has real pricing figures seeded; other
+  packages have those fields as `null` until real figures are available.
+- Data gift package catalogs are seeded with placeholder data - no sample
+  response existed in the source reference for those two.
+- The team's tracking sheet's "TMF-ALIGNED OUTPUT" column isn't filled in
+  yet for any API, so the mapper's exact field names are a first-pass
+  standard TMF mapping. Confirm and adjust once the team agrees on exact
+  field names.
 
 ## Git workflow
 
-Don't push directly to `main` or `dev`. For each API/feature:
-
-```
-git checkout dev
-git pull origin dev
-git checkout -b feature/get-vas-data-bundle-packages
-
-# ...make changes...
-
-git add [file path]
-git commit -m "[message]"
-
-git push origin feature/get-vas-data-bundle-packages
-```
-
-Then open a pull request into `dev` (not `main`) so the team can review before
-it merges in.
+Feature branches off `dev`, one per API/change - no direct pushes to `dev`
+or `main`. Small, descriptive commits per file. Open a PR into `dev` once
+locally tested.
