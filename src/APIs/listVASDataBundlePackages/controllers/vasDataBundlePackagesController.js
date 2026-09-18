@@ -1,17 +1,15 @@
-const { listVASDataBundlePackages: fetchVASDataBundlePackages } = require('../services/vasDataBundlePackagesService');
-const { success, failure } = require('../../../middleware/response');
+const { listVASDataBundlePackages } = require('../services/vasDataBundlePackagesService');
+const { mapVASDataBundlePackages } = require('../mappers/vasDataBundlePackagesMapper');
+const { sendResource, sendError } = require('../../../middleware/tmfResponse');
 
-async function listVASDataBundlePackages(req, res) {
+async function listVASDataBundlePackagesHandler(req, res) {
   try {
-    // subscriberID / packageName are accepted (legacy query params) but this
-    // service only owns the VAS addon catalog, so it doesn't need them yet -
-    // no synchronous call to another microservice, per the assignment rules.
-    const dataBundle = await fetchVASDataBundlePackages();
-    return success(res, dataBundle);
+    const offerings = await listVASDataBundlePackages();
+    return sendResource(res, mapVASDataBundlePackages(offerings));
   } catch (err) {
     console.error('listVASDataBundlePackages failed:', err);
-    return failure(res, 500, 'Failed to fetch VAS data bundle packages', err.message);
+    return sendError(res, 500, 'InternalError', 'Failed to fetch VAS data bundle packages');
   }
 }
 
-module.exports = { listVASDataBundlePackages };
+module.exports = { listVASDataBundlePackages: listVASDataBundlePackagesHandler };
