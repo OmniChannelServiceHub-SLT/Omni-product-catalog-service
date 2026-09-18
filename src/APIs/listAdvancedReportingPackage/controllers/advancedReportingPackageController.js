@@ -1,13 +1,14 @@
 const { listAdvancedReportingPackage } = require('../services/advancedReportingPackageService');
-const { success, failure } = require('../../../middleware/response');
+const { mapAdvancedReportingPackage } = require('../mappers/advancedReportingPackageMapper');
+const { sendResource, sendError } = require('../../../middleware/tmfResponse');
 
 async function listAdvancedReportingPackageHandler(req, res) {
   try {
-    const dataBundle = await listAdvancedReportingPackage();
-    return success(res, dataBundle);
+    const offerings = await listAdvancedReportingPackage();
+    return sendResource(res, mapAdvancedReportingPackage(offerings));
   } catch (err) {
     console.error('listAdvancedReportingPackage failed:', err);
-    return failure(res, 500, 'Failed to fetch advanced reporting packages', err.message);
+    return sendError(res, 500, 'InternalError', 'Failed to fetch advanced reporting packages');
   }
 }
 

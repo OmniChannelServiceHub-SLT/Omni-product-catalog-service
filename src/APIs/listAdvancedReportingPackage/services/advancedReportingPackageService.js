@@ -1,22 +1,9 @@
-// Row 143 in Omni-Channel-API-Mapping-By-Service.xlsx ("Product Catalog and Inventory S" sheet)
+// Row 143 in the mapping sheet ("Product Catalog and Inventory S" sheet)
 // Legacy source: [BBVAS] "GetAdvancedReportingPackage" (GET), log seq A49
-const PackageCatalogItem = require('../../../models/PackageCatalogItem');
+const TMF620_ProductOffering = require('../../../models/TMF620_productOffering');
 
 async function listAdvancedReportingPackage() {
-  const items = await PackageCatalogItem.find({ catalogType: 'advancedReporting' }).sort({ packageId: 1 });
-
-  // Matches real dataBundle shape from API_Params_SLTOMNI_V2_0_1.xlsx sheet "49":
-  // dataBundle.packages[]
-  return {
-    packages: items.map((item) => ({
-      packageid: item.packageId,
-      packagename: item.packageName,
-      packageinfo: item.packageInfo,
-      preprice: item.prePrice,
-      postprice: item.postPrice,
-      taxvalue: item.taxValue,
-    })),
-  };
+  return TMF620_ProductOffering.find({ offeringType: 'advancedReporting' }).sort({ packageId: 1 });
 }
 
 module.exports = { listAdvancedReportingPackage };
