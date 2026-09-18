@@ -16,16 +16,10 @@ const advancedReportingPackageRoutes = require('./APIs/listAdvancedReportingPack
 const app = express();
 
 app.use(cors());
-// Middleware to strip ngrok browser warning page
-app.use((req, res, next) => {
-  res.setHeader('ngrok-skip-browser-warning', 'true');
-  next();
-});
 app.use(express.json());
 
 // Health check - handy for confirming the service is up before wiring it into the gateway
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', service: 'product-catalog-service' }));
-
 
 // These MUST match the paths the API Gateway proxies to this service
 // (see OmniChannel-API-Gateway/src/routes/product.routes.js) - the gateway
