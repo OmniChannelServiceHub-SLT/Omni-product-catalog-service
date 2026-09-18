@@ -1,13 +1,14 @@
 const { listDataGiftPackagesMobile } = require('../services/dataGiftPackagesMobileService');
-const { success, failure } = require('../../../middleware/response');
+const { mapDataGiftPackagesMobile } = require('../mappers/dataGiftPackagesMobileMapper');
+const { sendResource, sendError } = require('../../../middleware/tmfResponse');
 
 async function listDataGiftPackagesMobileHandler(req, res) {
   try {
-    const dataBundle = await listDataGiftPackagesMobile();
-    return success(res, dataBundle);
+    const offerings = await listDataGiftPackagesMobile();
+    return sendResource(res, mapDataGiftPackagesMobile(offerings));
   } catch (err) {
     console.error('listDataGiftPackagesMobile failed:', err);
-    return failure(res, 500, 'Failed to fetch mobile data gift packages', err.message);
+    return sendError(res, 500, 'InternalError', 'Failed to fetch mobile data gift packages');
   }
 }
 

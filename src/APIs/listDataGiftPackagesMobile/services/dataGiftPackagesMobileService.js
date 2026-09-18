@@ -1,22 +1,9 @@
-// Row 119 in Omni-Channel-API-Mapping-By-Service.xlsx ("Product Catalog and Inventory S" sheet)
+// Row 119 in the mapping sheet ("Product Catalog and Inventory S" sheet)
 // Legacy source: [BBVAS] "GetDataGiftPackagesMobile" (GET), log seq A65
-// NOTE: no sample response captured in the source sheet for this one either -
-// same "packages" catalog shape as createDataGiftPackages/listAdvancedReportingPackage.
-const PackageCatalogItem = require('../../../models/PackageCatalogItem');
+const TMF620_ProductOffering = require('../../../models/TMF620_productOffering');
 
 async function listDataGiftPackagesMobile() {
-  const items = await PackageCatalogItem.find({ catalogType: 'dataGiftMobile' }).sort({ packageId: 1 });
-
-  return {
-    packages: items.map((item) => ({
-      packageid: item.packageId,
-      packagename: item.packageName,
-      packageinfo: item.packageInfo,
-      preprice: item.prePrice,
-      postprice: item.postPrice,
-      taxvalue: item.taxValue,
-    })),
-  };
+  return TMF620_ProductOffering.find({ offeringType: 'dataGiftMobile' }).sort({ packageId: 1 });
 }
 
 module.exports = { listDataGiftPackagesMobile };
