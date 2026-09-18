@@ -1,13 +1,14 @@
 const { createDataGiftPackages } = require('../services/dataGiftPackagesService');
-const { success, failure } = require('../../../middleware/response');
+const { mapDataGiftPackages } = require('../mappers/dataGiftPackagesMapper');
+const { sendResource, sendError } = require('../../../middleware/tmfResponse');
 
 async function createDataGiftPackagesHandler(req, res) {
   try {
-    const dataBundle = await createDataGiftPackages();
-    return success(res, dataBundle);
+    const offerings = await createDataGiftPackages();
+    return sendResource(res, mapDataGiftPackages(offerings));
   } catch (err) {
     console.error('createDataGiftPackages failed:', err);
-    return failure(res, 500, 'Failed to fetch data gift packages', err.message);
+    return sendError(res, 500, 'InternalError', 'Failed to fetch data gift packages');
   }
 }
 
