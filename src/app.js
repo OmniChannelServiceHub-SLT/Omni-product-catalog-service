@@ -18,16 +18,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Health check - handy for confirming the service is up before wiring it into the gateway
-app.get('/health', (req, res) => res.status(200).json({ status: 'ok', service: 'product-catalog-service' }));
-
-// These MUST match the paths the API Gateway proxies to this service
-// (see OmniChannel-API-Gateway/src/routes/product.routes.js) - the gateway
-// forwards the client's original URL untouched, so whatever prefix it proxies,
-// this service has to be listening on the exact same prefix.
 const CATALOG_BASE_PATH = '/tmf-api/productCatalogManagement/v4'; // TMF620
 const INVENTORY_BASE_PATH = '/tmf-api/productInventoryManagement/v4'; // TMF637
 
+// Health check - handy for confirming the service is up before wiring it into the gateway
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok', service: 'product-catalog-service' }));
+// Add these BEFORE your route declarations in app.js
+app.get(INVENTORY_BASE_PATH, (req, res) => res.status(200).json({ status: 'ok' }));
+app.get(CATALOG_BASE_PATH, (req, res) => res.status(200).json({ status: 'ok' }));
 // TMF620 - Product Catalog Management
 app.use(`${CATALOG_BASE_PATH}/vasDataBundlePackages`, vasDataBundlePackagesRoutes);
 app.use(`${CATALOG_BASE_PATH}/bbPackages`, bbPackagesRoutes);
