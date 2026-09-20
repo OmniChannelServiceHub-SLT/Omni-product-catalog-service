@@ -1,11 +1,16 @@
 const { createDataGiftPackages } = require('../services/dataGiftPackagesService');
-const { mapDataGiftPackages } = require('../mappers/dataGiftPackagesMapper');
-const { sendResource, sendError } = require('../../../middleware/tmfResponse');
+const { toTmfResponse, toLegacyResponse } = require('../mappers/dataGiftPackagesMapper');
+const { sendError } = require('../../../middleware/tmfResponse');
 
 async function createDataGiftPackagesHandler(req, res) {
   try {
     const offerings = await createDataGiftPackages();
-    return sendResource(res, mapDataGiftPackages(offerings));
+
+    if (req.headers['x-response-format'] === 'legacy') {
+      return res.status(200).json(toLegacyResponse(offerings));
+    }
+
+    return res.status(200).json(toTmfResponse(offerings));
   } catch (err) {
     console.error('createDataGiftPackages failed:', err);
     return sendError(res, 500, 'InternalError', 'Failed to fetch data gift packages');

@@ -1,5 +1,9 @@
 // Mapper for createDataGiftPackages - self-contained, no shared folder
-// outside APIs/ per the team's file structure rule.
+// outside APIs/ per the team's file structure rule. Exports both response
+// shapes off the same data.
+// NOTE: no real legacy sample response existed in the source sheet for this
+// one (sheet "57" was blank) - the legacy shape here mirrors the sibling
+// catalog API listAdvancedReportingPackage (A49), which IS documented.
 
 function toCharacteristics(obj) {
   return Object.entries(obj)
@@ -33,8 +37,28 @@ function mapOfferingToResource(offering) {
   });
 }
 
-function mapDataGiftPackages(offerings) {
+function toTmfResponse(offerings) {
   return offerings.map((o) => mapOfferingToResource(o));
 }
 
-module.exports = { mapDataGiftPackages };
+function toLegacyResponse(offerings) {
+  return {
+    isSuccess: true,
+    errorMessege: null,
+    exceptionDetail: null,
+    dataBundle: {
+      packages: offerings.map((o) => ({
+        packageid: o.packageId,
+        packagename: o.name,
+        packageinfo: o.description,
+        preprice: o.prePrice,
+        postprice: o.postPrice,
+        taxvalue: o.taxValue,
+      })),
+    },
+    errorShow: null,
+    errorCode: null,
+  };
+}
+
+module.exports = { toTmfResponse, toLegacyResponse };
