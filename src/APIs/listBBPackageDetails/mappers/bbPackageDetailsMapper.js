@@ -1,5 +1,6 @@
 // Mapper for listBBPackageDetails - self-contained, no shared folder outside
-// APIs/ per the team's file structure rule.
+// APIs/ per the team's file structure rule. Exports both response shapes off
+// the same data.
 
 function toCharacteristics(obj) {
   return Object.entries(obj)
@@ -17,7 +18,7 @@ function buildResource({ id, type, baseType, extra = {} }) {
   };
 }
 
-function mapBBPackageDetails(offering) {
+function toTmfResponse(offering) {
   return buildResource({
     id: offering.packageId,
     type: 'ProductOffering',
@@ -32,4 +33,25 @@ function mapBBPackageDetails(offering) {
   });
 }
 
-module.exports = { mapBBPackageDetails };
+// Rebuilds the exact original MySLT GetBBPackageDetails shape (sheet "76") -
+// legacy dataBundle was an ARRAY with one entry.
+function toLegacyResponse(offering) {
+  return {
+    isSuccess: true,
+    errorMessege: null,
+    exceptionDetail: null,
+    dataBundle: [
+      {
+        BB_PACKAGE_CODE: offering.packageId,
+        BB_PACKAGE_NAME: offering.name,
+        MONTHLY_RENTAL: offering.monthlyRental != null ? offering.monthlyRental.toFixed(2) : null,
+        STANDARD_GB: offering.standardGB != null ? String(offering.standardGB) : null,
+        FREE_GB: offering.freeGB != null ? String(offering.freeGB) : null,
+      },
+    ],
+    errorShow: null,
+    errorCode: null,
+  };
+}
+
+module.exports = { toTmfResponse, toLegacyResponse };

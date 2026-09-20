@@ -1,6 +1,6 @@
 const { listBBPackageDetails } = require('../services/bbPackageDetailsService');
-const { mapBBPackageDetails } = require('../mappers/bbPackageDetailsMapper');
-const { sendResource, sendError } = require('../../../middleware/tmfResponse');
+const { toTmfResponse, toLegacyResponse } = require('../mappers/bbPackageDetailsMapper');
+const { sendError } = require('../../../middleware/tmfResponse');
 
 async function listBBPackageDetailsHandler(req, res) {
   try {
@@ -14,7 +14,11 @@ async function listBBPackageDetailsHandler(req, res) {
       return sendError(res, 404, 'NotFound', `No package found for code=${code}`);
     }
 
-    return sendResource(res, mapBBPackageDetails(offering));
+    if (req.headers['x-response-format'] === 'legacy') {
+      return res.status(200).json(toLegacyResponse(offering));
+    }
+
+    return res.status(200).json(toTmfResponse(offering));
   } catch (err) {
     console.error('listBBPackageDetails failed:', err);
     return sendError(res, 500, 'InternalError', 'Failed to fetch BB package details');
