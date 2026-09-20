@@ -1,5 +1,6 @@
 // Mapper for listBBPackages - self-contained, no shared folder outside APIs/
-// per the team's file structure rule.
+// per the team's file structure rule. Exports both response shapes off the
+// same data.
 
 function toCharacteristics(obj) {
   return Object.entries(obj)
@@ -28,11 +29,28 @@ function mapOfferingToResource(offering, extraCharacteristics = {}) {
   });
 }
 
-function mapBBPackages({ upgrades, downgrades }) {
+function toTmfResponse({ upgrades, downgrades }) {
   return [
     ...upgrades.map((o) => mapOfferingToResource(o, { relation: 'upgrade' })),
     ...downgrades.map((o) => mapOfferingToResource(o, { relation: 'downgrade' })),
   ];
 }
 
-module.exports = { mapBBPackages };
+// Rebuilds the exact original MySLT GetBBPackages shape (sheet "75").
+function toLegacyResponse({ upgrades, downgrades }) {
+  const toEntry = (o) => ({ BB_PACKAGE_NAME: o.name, BB_PACKAGE_CODE: o.packageId });
+
+  return {
+    isSuccess: true,
+    errorMessege: null,
+    exceptionDetail: null,
+    dataBundle: {
+      Upgrades: upgrades.map(toEntry),
+      Downgrades: downgrades.map(toEntry),
+    },
+    errorShow: null,
+    errorCode: null,
+  };
+}
+
+module.exports = { toTmfResponse, toLegacyResponse };
