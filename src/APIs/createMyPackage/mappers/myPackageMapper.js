@@ -1,5 +1,6 @@
 // Mapper for createMyPackage - self-contained, no shared folder outside
-// APIs/ per the team's file structure rule.
+// APIs/ per the team's file structure rule. Exports both response shapes off
+// the same data.
 
 function toCharacteristics(obj) {
   return Object.entries(obj)
@@ -17,7 +18,7 @@ function buildResource({ id, type, baseType, extra = {} }) {
   };
 }
 
-function mapMyPackage(snapshot) {
+function toTmfResponse(snapshot) {
   return buildResource({
     id: snapshot.subscriberId,
     type: 'Product',
@@ -49,4 +50,37 @@ function mapMyPackage(snapshot) {
   });
 }
 
-module.exports = { mapMyPackage };
+// Rebuilds the exact original MySLT MyPackage shape (sheet "48").
+function toLegacyResponse(snapshot) {
+  return {
+    isSuccess: true,
+    errorMessege: null,
+    exceptionDetail: null,
+    dataBundle: {
+      package_name: snapshot.packageName,
+      package_summary: {
+        limit: snapshot.summaryLimit,
+        used: snapshot.summaryUsed,
+        volume_unit: snapshot.summaryVolumeUnit,
+      },
+      usageDetails: snapshot.usageDetails.map((d) => ({
+        name: d.name,
+        limit: d.limit,
+        remaining: d.remaining,
+        used: d.used,
+        percentage: d.percentage,
+        volume_unit: d.volumeUnit,
+        expiry_date: d.expiryDate,
+        claim: d.claim,
+        unsubscribable: d.unsubscribable,
+        timestamp: d.timestamp,
+        subscriptionid: d.subscriptionId,
+      })),
+      reported_time: snapshot.reportedTime,
+    },
+    errorShow: null,
+    errorCode: null,
+  };
+}
+
+module.exports = { toTmfResponse, toLegacyResponse };
