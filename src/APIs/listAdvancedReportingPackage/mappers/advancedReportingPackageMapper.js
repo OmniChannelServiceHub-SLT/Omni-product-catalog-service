@@ -1,5 +1,6 @@
 // Mapper for listAdvancedReportingPackage - self-contained, no shared folder
-// outside APIs/ per the team's file structure rule.
+// outside APIs/ per the team's file structure rule. Exports both response
+// shapes off the same data.
 
 function toCharacteristics(obj) {
   return Object.entries(obj)
@@ -33,8 +34,29 @@ function mapOfferingToResource(offering) {
   });
 }
 
-function mapAdvancedReportingPackage(offerings) {
+function toTmfResponse(offerings) {
   return offerings.map((o) => mapOfferingToResource(o));
 }
 
-module.exports = { mapAdvancedReportingPackage };
+// Rebuilds the exact original MySLT GetAdvancedReportingPackage shape (sheet "49").
+function toLegacyResponse(offerings) {
+  return {
+    isSuccess: true,
+    errorMessege: null,
+    exceptionDetail: null,
+    dataBundle: {
+      packages: offerings.map((o) => ({
+        packageid: o.packageId,
+        packagename: o.name,
+        packageinfo: o.description,
+        preprice: o.prePrice,
+        postprice: o.postPrice,
+        taxvalue: o.taxValue,
+      })),
+    },
+    errorShow: null,
+    errorCode: null,
+  };
+}
+
+module.exports = { toTmfResponse, toLegacyResponse };
