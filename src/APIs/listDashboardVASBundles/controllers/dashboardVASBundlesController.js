@@ -1,6 +1,6 @@
 const { listDashboardVASBundles } = require('../services/dashboardVASBundlesService');
-const { mapDashboardVASBundles } = require('../mappers/dashboardVASBundlesMapper');
-const { sendResource, sendError } = require('../../../middleware/tmfResponse');
+const { toTmfResponse, toLegacyResponse } = require('../mappers/dashboardVASBundlesMapper');
+const { sendError } = require('../../../middleware/tmfResponse');
 
 async function listDashboardVASBundlesHandler(req, res) {
   try {
@@ -14,7 +14,11 @@ async function listDashboardVASBundlesHandler(req, res) {
       return sendError(res, 404, 'NotFound', `No VAS dashboard data found for subscriberID=${subscriberID}`);
     }
 
-    return sendResource(res, mapDashboardVASBundles(snapshot));
+    if (req.headers['x-response-format'] === 'legacy') {
+      return res.status(200).json(toLegacyResponse(snapshot));
+    }
+
+    return res.status(200).json(toTmfResponse(snapshot));
   } catch (err) {
     console.error('listDashboardVASBundles failed:', err);
     return sendError(res, 500, 'InternalError', 'Failed to fetch VAS dashboard bundles');
