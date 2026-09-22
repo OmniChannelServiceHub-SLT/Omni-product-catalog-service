@@ -12,6 +12,7 @@ const dashboardVASBundlesRoutes = require('./APIs/listDashboardVASBundles/routes
 // TMF637 - Product Inventory Management
 const myPackageRoutes = require('./APIs/createMyPackage/routes/myPackageRoutes');
 const advancedReportingPackageRoutes = require('./APIs/listAdvancedReportingPackage/routes/advancedReportingPackageRoutes');
+const bbFreedomStatusRoutes = require('./APIs/listBBFreedomStatus/routes/bbFreedomStatusRoutes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use(`${CATALOG_BASE_PATH}/dashboardVASBundles`, dashboardVASBundlesRoutes);
 // TMF637 - Product Inventory Management
 app.use(`${INVENTORY_BASE_PATH}/myPackage`, myPackageRoutes);
 app.use(`${INVENTORY_BASE_PATH}/advancedReportingPackages`, advancedReportingPackageRoutes);
+app.use(`${INVENTORY_BASE_PATH}/bbFreedomStatus`, bbFreedomStatusRoutes);
 
 // 404 fallback
 app.use((req, res) => {

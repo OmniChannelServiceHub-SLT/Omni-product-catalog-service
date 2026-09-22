@@ -1,8 +1,5 @@
 // TMF637 - Product Inventory Management: Product resource.
-// Both per-subscriber usage-snapshot APIs are the same TMF resource type
-// (Product), just a different kind:
-//   myPackage    -> createMyPackage         (main data package usage)
-//   vasDashboard -> listDashboardVASBundles (VAS/bonus bundle usage)
+
 const mongoose = require('mongoose');
 
 const usageDetailSchema = new mongoose.Schema(
@@ -24,18 +21,79 @@ const usageDetailSchema = new mongoose.Schema(
 
 const productSchema = new mongoose.Schema(
   {
-    kind: { type: String, required: true, enum: ['myPackage', 'vasDashboard'] },
-    subscriberId: { type: String, required: true },
-    packageName: { type: String, default: null },
-    summaryLimit: { type: String },
-    summaryUsed: { type: String },
-    summaryVolumeUnit: { type: String, default: 'GB' },
-    usageDetails: { type: [usageDetailSchema], default: [] },
-    reportedTime: { type: String },
+    // TMF637 Product types used by this service
+    kind: {
+      type: String,
+      required: true,
+      enum: [
+        'myPackage',
+        'vasDashboard',
+        'bbFreedomStatus'
+      ]
+    },
+
+    // Subscriber / telephone number
+    subscriberId: {
+      type: String,
+      required: true
+    },
+
+    tpNo: {
+      type: String,
+      default: null
+    },
+
+    packageName: {
+      type: String,
+      default: null
+    },
+
+    summaryLimit: {
+      type: String
+    },
+
+    summaryUsed: {
+      type: String
+    },
+
+    summaryVolumeUnit: {
+      type: String,
+      default: 'GB'
+    },
+
+    usageDetails: {
+      type: [usageDetailSchema],
+      default: []
+    },
+
+    reportedTime: {
+      type: String
+    },
+
+    // BB Freedom Status
+    freedomRequested: {
+      type: String,
+      enum: ['Y', 'N'],
+      default: 'N'
+    },
+
+    freedomStatusMessage: {
+      type: String,
+      default: null
+    }
   },
-  { timestamps: true, collection: 'tmf637_products' }
+  {
+    timestamps: true,
+    collection: 'tmf637_products'
+  }
 );
 
-productSchema.index({ kind: 1, subscriberId: 1 }, { unique: true });
+productSchema.index(
+  { kind: 1, subscriberId: 1 },
+  { unique: true }
+);
 
-module.exports = mongoose.model('TMF637_Product', productSchema);
+module.exports = mongoose.model(
+  'TMF637_Product',
+  productSchema
+);
