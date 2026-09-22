@@ -13,6 +13,9 @@ const dashboardVASBundlesRoutes = require('./APIs/listDashboardVASBundles/routes
 const myPackageRoutes = require('./APIs/createMyPackage/routes/myPackageRoutes');
 const advancedReportingPackageRoutes = require('./APIs/listAdvancedReportingPackage/routes/advancedReportingPackageRoutes');
 
+// TMF638 namespace - legacy call-forwarding request submission extension.
+const callForwardingRequestRoutes = require('./APIs/createCallForwardingRequest/routes/callForwardingRequestRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -39,6 +42,8 @@ app.use(`${CATALOG_BASE_PATH}/dashboardVASBundles`, dashboardVASBundlesRoutes);
 // TMF637 - Product Inventory Management
 app.use(`${INVENTORY_BASE_PATH}/myPackage`, myPackageRoutes);
 app.use(`${INVENTORY_BASE_PATH}/advancedReportingPackages`, advancedReportingPackageRoutes);
+
+app.use('/tmf-api/serviceInventory/v5/callForwardingRequest', callForwardingRequestRoutes);
 
 // 404 fallback - TMF-standard error shape, matching src/middleware/tmfResponse.js
 app.use((req, res) => {

@@ -14,9 +14,11 @@ Management).
 - Data gift package catalogs (standard and mobile)
 - Advanced reporting package catalog
 - Per-subscriber usage snapshots (main package usage and VAS dashboard usage)
+- Call-forwarding request submissions (workbook entry 289, requestType Y)
 
-Each API reads only from this service's own MongoDB database - no
-synchronous calls to any other microservice.
+APIs use this service's own MongoDB database, with no synchronous calls to
+other microservices. Call-forwarding submissions persist an acknowledged
+request; they do not activate a telephone service.
 
 ## Architecture
 
@@ -51,6 +53,12 @@ wired up. Base paths:
 
 - TMF620 (Product Catalog Management): `/tmf-api/productCatalogManagement/v4`
 - TMF637 (Product Inventory Management): `/tmf-api/productInventoryManagement/v4`
+
+The call-forwarding compatibility extension is
+`GET /tmf-api/serviceInventory/v5/callForwardingRequest`. It requires a valid
+IAM bearer token and `JWT_ACCESS_SECRET` matching IAM. See
+[its contract and CTK coverage](docs/createCallForwardingRequest.md).
+The extension does not implement the standard TMF638 Service CRUD API.
 
 ## Notes on data completeness
 
