@@ -1,60 +1,101 @@
+"use strict";
+
 const express = require("express");
 const cors = require("cors");
 
-// TMF620 - Product Catalog Management
-/*
-const vasDataBundlePackagesRoutes = require('./APIs/listVASDataBundlePackages/routes/vasDataBundlePackagesRoutes');
-const bbPackagesRoutes = require('./APIs/listBBPackages/routes/bbPackagesRoutes');
-const bbPackageDetailsRoutes = require('./APIs/listBBPackageDetails/routes/bbPackageDetailsRoutes');
-const dataGiftPackagesRoutes = require('./APIs/createDataGiftPackages/routes/dataGiftPackagesRoutes');
-const dataGiftPackagesMobileRoutes = require('./APIs/listDataGiftPackagesMobile/routes/dataGiftPackagesMobileRoutes');
-const dashboardVASBundlesRoutes = require('./APIs/listDashboardVASBundles/routes/dashboardVASBundlesRoutes');
+const Product = require("./models/TMF637_product");
+const jwtAuth = require("./middleware/jwtAuth.middleware");
 
-// TMF637 - Product Inventory Management
-const myPackageRoutes = require('./APIs/createMyPackage/routes/myPackageRoutes');
-const advancedReportingPackageRoutes = require('./APIs/listAdvancedReportingPackage/routes/advancedReportingPackageRoutes');
-const 
-*/
-const retrieveSubscription = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
+const {
+  createRetrieveSubscriptionRouter,
+} = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Health check - handy for confirming the service is up before wiring it into the gateway
-app.get("/health", (req, res) =>
-  res.status(200).json({ status: "ok", service: "product-catalog-service" }),
+// Health check
+app.get("/health", (req, res) => {
+  return res.status(200).json({
+    status: "ok",
+    service: "product-catalog-service",
+  });
+});
+
+// Standard TMF637 v4 path used by the supplied retrieval service.
+const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
+
+const publicBaseUrl = process.env.PUBLIC_BASE_URL;
+
+if (!publicBaseUrl) {
+  throw new Error(
+    "PUBLIC_BASE_URL is required. Load .env before importing app.js.",
+  );
+}
+
+// Implement your actual subscriber/account ownership policy here.
+// Until configured, access is denied with HTTP 403.
+async function authorizeProduct(user, product) {
+  return false;
+}
+
+// Register API routes BEFORE the 404 fallback.
+app.use(
+  INVENTORY_BASE_PATH,
+  createRetrieveSubscriptionRouter({
+    Product,
+    jwtAuth,
+    authorizeProduct,
+    publicBaseUrl,
+  }),
 );
 
-// These MUST match the paths the API Gateway proxies to this service
-// (see OmniChannel-API-Gateway/src/routes/product.routes.js) - the gateway
-// forwards the client's original URL untouched, so whatever prefix it proxies,
-// this service has to be listening on the exact same prefix.
-const CATALOG_BASE_PATH = "/tmf-api/productCatalogManagement/v4"; // TMF620
-const INVENTORY_BASE_PATH = "/tmf-api/productInventoryManagement/v4"; // TMF637
-
-// TMF620 - Product Catalog Management
-/*
-app.use(`${CATALOG_BASE_PATH}/vasDataBundlePackages`, vasDataBundlePackagesRoutes);
-app.use(`${CATALOG_BASE_PATH}/bbPackages`, bbPackagesRoutes);
-app.use(`${CATALOG_BASE_PATH}/bbPackageDetails`, bbPackageDetailsRoutes);
-app.use(`${CATALOG_BASE_PATH}/dataGiftPackages`, dataGiftPackagesRoutes);
-app.use(`${CATALOG_BASE_PATH}/dataGiftPackagesMobile`, dataGiftPackagesMobileRoutes);
-app.use(`${CATALOG_BASE_PATH}/dashboardVASBundles`, dashboardVASBundlesRoutes);
-
-// TMF637 - Product Inventory Management
-app.use(`${INVENTORY_BASE_PATH}/myPackage`, myPackageRoutes);
-app.use(`${INVENTORY_BASE_PATH}/advancedReportingPackages`, advancedReportingPackageRoutes);
-*/
-app.use("/", retrieveSubscription);
-// 404 fallback - TMF-standard error shape, matching src/middleware/tmfResponse.js
+// 404 fallback
 app.use((req, res) => {
-  res.status(404).json({
+  return res.status(404).json({
     code: "404",
-    reason: "NotFound",
+    reason: "Not Found",
     message: `Route not found: ${req.method} ${req.originalUrl}`,
     status: "404",
+    "@type": "Error",
+  });
+});
+
+// Shared error handler
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  const candidate = error.statusCode ?? error.status;
+  const status =
+    Number.isInteger(candidate) && candidate >= 400 && candidate <= 599
+      ? candidate
+      : 500;
+
+  const reasons = {
+    400: "Bad Request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not Found",
+    405: "Method Not Allowed",
+    413: "Payload Too Large",
+    500: "Internal Server Error",
+  };
+
+  if (status === 401) {
+    res.set("WWW-Authenticate", "Bearer");
+  }
+
+  return res.status(status).json({
+    code: String(status),
+    reason: reasons[status] || "Request Failed",
+    message:
+      status >= 500
+        ? "An unexpected server error occurred."
+        : reasons[status] || "The request could not be processed.",
+    status: String(status),
     "@type": "Error",
   });
 });
