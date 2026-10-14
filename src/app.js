@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 
 const Product = require("./models/TMF637_product");
-const jwtAuth = require("./middleware/jwtAuth.middleware");
+//const jwtAuth = require("./middleware/jwtAuth.middleware");
 
 const {
   createRetrieveSubscriptionRouter,
