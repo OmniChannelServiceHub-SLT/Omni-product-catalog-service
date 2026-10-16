@@ -4,11 +4,17 @@ const express = require("express");
 const cors = require("cors");
 
 const Product = require("./models/TMF637_product");
-//const jwtAuth = require("./middleware/jwtAuth.middleware");
+const jwtAuth = require("./middleware/jwtAuth.middleware");
 
+// Existing retrieveSubscription API
 const {
   createRetrieveSubscriptionRouter,
 } = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
+
+// getMyPackage API — matches your routes/route.js filename
+const {
+  createGetMyPackageRouter,
+} = require("./APIs/getMyPackage/routes/route");
 
 const app = express();
 
@@ -23,24 +29,36 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Standard TMF637 v4 path used by the supplied retrieval service.
 const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
-
-const publicBaseUrl = process.env.PUBLIC_BASE_URL;
+const publicBaseUrl = process.env.BASE_URL;
 
 if (!publicBaseUrl) {
-  throw new Error(
-    "PUBLIC_BASE_URL is required. Load .env before importing app.js.",
-  );
+  throw new Error("BASE_URL is required. Load .env before importing app.js.");
 }
 
-// Implement your actual subscriber/account ownership policy here.
-// Until configured, access is denied with HTTP 403.
+// Implement your actual product/account ownership policy.
 async function authorizeProduct(user, product) {
   return false;
 }
 
-// Register API routes BEFORE the 404 fallback.
+// Implement a server-side lookup of subscriber IDs
+// that this verified user is permitted to access.
+async function getAuthorizedSubscriberIds(user) {
+  return [];
+}
+
+// GET /tmf-api/productInventory/v4/product
+app.use(
+  INVENTORY_BASE_PATH,
+  createGetMyPackageRouter({
+    Product,
+    jwtAuth,
+    getAuthorizedSubscriberIds,
+    publicBaseUrl,
+  }),
+);
+
+// GET /tmf-api/productInventory/v4/product/:id
 app.use(
   INVENTORY_BASE_PATH,
   createRetrieveSubscriptionRouter({
@@ -51,7 +69,7 @@ app.use(
   }),
 );
 
-// 404 fallback
+// Register any additional API routes ABOVE this handler.
 app.use((req, res) => {
   return res.status(404).json({
     code: "404",
@@ -69,6 +87,7 @@ app.use((error, req, res, next) => {
   }
 
   const candidate = error.statusCode ?? error.status;
+
   const status =
     Number.isInteger(candidate) && candidate >= 400 && candidate <= 599
       ? candidate
