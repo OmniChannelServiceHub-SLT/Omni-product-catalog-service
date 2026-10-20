@@ -3,22 +3,41 @@
 const express = require("express");
 const cors = require("cors");
 
+// Shared models
 const Product = require("./models/TMF637_product");
+const ProductOffering = require("./models/TMF620_productOffering");
+
+//listOfferingDataGift
+const {
+  createListOfferingDataGiftRouter,
+} = require("./APIs/listOfferingDataGift/routes/route");
+
+// Shared authentication middleware
 const jwtAuth = require("./middleware/jwtAuth.middleware");
 
-// Existing retrieveSubscription API
+// TMF637 — retrieveSubscription
 const {
   createRetrieveSubscriptionRouter,
 } = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
 
-// getMyPackage API — matches your routes/route.js filename
+// TMF637 — getMyPackage
 const {
   createGetMyPackageRouter,
 } = require("./APIs/getMyPackage/routes/route");
 
+// TMF620 — listOfferingAdv
+const {
+  createListOfferingAdvRouter,
+} = require("./APIs/listOfferingAdv/routes/route");
+
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: ["X-Result-Count", "X-Total-Count"],
+  }),
+);
+
 app.use(express.json());
 
 // Health check
@@ -29,7 +48,10 @@ app.get("/health", (req, res) => {
   });
 });
 
+// TMF API base paths
 const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
+const CATALOG_BASE_PATH = "/tmf-api/productCatalogManagement/v4";
+
 const publicBaseUrl = process.env.BASE_URL;
 
 if (!publicBaseUrl) {
@@ -37,6 +59,7 @@ if (!publicBaseUrl) {
 }
 
 // Implement your actual product/account ownership policy.
+// Access remains denied until this policy is connected.
 async function authorizeProduct(user, product) {
   return false;
 }
@@ -47,7 +70,36 @@ async function getAuthorizedSubscriberIds(user) {
   return [];
 }
 
-// GET /tmf-api/productInventory/v4/product
+// TMF620 — ProductOffering collection and ID retrieval
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingAdvRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
+// Specific dataGift handler FIRST
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingDataGiftRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
+
+// Existing generic catalog handler AFTER
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingAdvRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
+
+// TMF637 — Product collection
 app.use(
   INVENTORY_BASE_PATH,
   createGetMyPackageRouter({
@@ -58,7 +110,7 @@ app.use(
   }),
 );
 
-// GET /tmf-api/productInventory/v4/product/:id
+// TMF637 — Product ID retrieval
 app.use(
   INVENTORY_BASE_PATH,
   createRetrieveSubscriptionRouter({
@@ -69,7 +121,7 @@ app.use(
   }),
 );
 
-// Register any additional API routes ABOVE this handler.
+// Register additional API routes ABOVE this handler.
 app.use((req, res) => {
   return res.status(404).json({
     code: "404",
@@ -99,8 +151,12 @@ app.use((error, req, res, next) => {
     403: "Forbidden",
     404: "Not Found",
     405: "Method Not Allowed",
+    409: "Conflict",
     413: "Payload Too Large",
+    415: "Unsupported Media Type",
+    429: "Too Many Requests",
     500: "Internal Server Error",
+    503: "Service Unavailable",
   };
 
   if (status === 401) {
