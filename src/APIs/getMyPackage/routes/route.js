@@ -24,11 +24,11 @@ function createGetMyPackageRouter({
     publicBaseUrl,
   });
 
-  const controller = createGetMyPackageController({
-    getMyPackage,
-  });
-
-  router.get("/product", jwtAuth, controller);
+  router.get(
+    "/product",
+    jwtAuth,
+    createGetMyPackageController({ getMyPackage }),
+  );
 
   return router;
 }
