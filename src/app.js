@@ -7,6 +7,11 @@ const cors = require("cors");
 const Product = require("./models/TMF637_product");
 const ProductOffering = require("./models/TMF620_productOffering");
 
+//listProductOffering
+const {
+  createListProductOfferingRouter,
+} = require("./APIs/listProductOffering/routes/route");
+
 //listOfferingDataGift
 const {
   createListOfferingDataGiftRouter,
@@ -83,6 +88,17 @@ app.use(
 app.use(
   CATALOG_BASE_PATH,
   createListOfferingDataGiftRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
+
+//listProductOffering
+// Shared catalog router — AFTER the targeted catalog routers.
+app.use(
+  CATALOG_BASE_PATH,
+  createListProductOfferingRouter({
     ProductOffering,
     jwtAuth,
     publicBaseUrl,
