@@ -7,36 +7,41 @@ const cors = require("cors");
 const Product = require("./models/TMF637_product");
 const ProductOffering = require("./models/TMF620_productOffering");
 
-//listProductOffering
-const {
-  createListProductOfferingRouter,
-} = require("./APIs/listProductOffering/routes/route");
+// TMF638 model — use the actual filename before enabling retrieveService.
+// const ServiceModel = require("./models/ACTUAL_TMF638_MODEL");
 
-//listOfferingDataGift
+// Shared JWT authentication middleware
+const jwtAuth = require("./middleware/jwtAuth.middleware");
+
+// TMF620 — targeted dataGift handler
 const {
   createListOfferingDataGiftRouter,
 } = require("./APIs/listOfferingDataGift/routes/route");
 
-// Shared authentication middleware
-const jwtAuth = require("./middleware/jwtAuth.middleware");
-
-// TMF637 — retrieveSubscription
+// TMF620 — shared catalog router
 const {
-  createRetrieveSubscriptionRouter,
-} = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
+  createListProductOfferingRouter,
+} = require("./APIs/listProductOffering/routes/route");
 
 // TMF637 — getMyPackage
 const {
   createGetMyPackageRouter,
 } = require("./APIs/getMyPackage/routes/route");
 
-// TMF620 — listOfferingAdv
+// TMF637 — retrieveSubscription
 const {
-  createListOfferingAdvRouter,
-} = require("./APIs/listOfferingAdv/routes/route");
+  createRetrieveSubscriptionRouter,
+} = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
+
+// TMF638 — retrieveService
+// Uncomment after the ServiceModel import is configured.
+// const {
+//   createRetrieveServiceRouter,
+// } = require("./APIs/retrieveService/routes/route");
 
 const app = express();
 
+// General middleware
 app.use(
   cors({
     exposedHeaders: ["X-Result-Count", "X-Total-Count"],
@@ -54,8 +59,9 @@ app.get("/health", (req, res) => {
 });
 
 // TMF API base paths
-const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
 const CATALOG_BASE_PATH = "/tmf-api/productCatalogManagement/v4";
+const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
+const SERVICE_BASE_PATH = "/tmf-api/serviceInventory/v4";
 
 const publicBaseUrl = process.env.BASE_URL;
 
@@ -63,28 +69,25 @@ if (!publicBaseUrl) {
   throw new Error("BASE_URL is required. Load .env before importing app.js.");
 }
 
-// Implement your actual product/account ownership policy.
-// Access remains denied until this policy is connected.
+// Product ownership policy.
+// Implement your actual account-access rules.
 async function authorizeProduct(user, product) {
   return false;
 }
 
-// Implement a server-side lookup of subscriber IDs
-// that this verified user is permitted to access.
+// Subscriber access policy.
+// Return subscriber IDs linked to the verified user.
 async function getAuthorizedSubscriberIds(user) {
   return [];
 }
 
-// TMF620 — ProductOffering collection and ID retrieval
-app.use(
-  CATALOG_BASE_PATH,
-  createListOfferingAdvRouter({
-    ProductOffering,
-    jwtAuth,
-    publicBaseUrl,
-  }),
-);
-// Specific dataGift handler FIRST
+// Service access policy.
+// Implement ownership, operator permissions and CFS/RFS visibility.
+async function authorizeService(user, service) {
+  return false;
+}
+
+// TMF620 — targeted handlers must come before the generic router.
 app.use(
   CATALOG_BASE_PATH,
   createListOfferingDataGiftRouter({
@@ -94,21 +97,11 @@ app.use(
   }),
 );
 
-//listProductOffering
-// Shared catalog router — AFTER the targeted catalog routers.
+// TMF620 — register the generic catalog router ONCE.
+// Also handles advancedReporting queries using offeringType.
 app.use(
   CATALOG_BASE_PATH,
   createListProductOfferingRouter({
-    ProductOffering,
-    jwtAuth,
-    publicBaseUrl,
-  }),
-);
-
-// Existing generic catalog handler AFTER
-app.use(
-  CATALOG_BASE_PATH,
-  createListOfferingAdvRouter({
     ProductOffering,
     jwtAuth,
     publicBaseUrl,
@@ -137,7 +130,18 @@ app.use(
   }),
 );
 
-// Register additional API routes ABOVE this handler.
+// TMF638 — enable after configuring the actual ServiceModel import.
+// app.use(
+//   SERVICE_BASE_PATH,
+//   createRetrieveServiceRouter({
+//     ServiceModel,
+//     jwtAuth,
+//     authorizeService,
+//     publicBaseUrl,
+//   })
+// );
+
+// 404 fallback — keep after all API registrations.
 app.use((req, res) => {
   return res.status(404).json({
     code: "404",
