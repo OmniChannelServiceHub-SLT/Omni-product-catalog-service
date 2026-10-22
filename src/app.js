@@ -7,6 +7,15 @@ const cors = require("cors");
 const Product = require("./models/TMF637_product");
 const ProductOffering = require("./models/TMF620_productOffering");
 
+const {
+  createListOfferingVasRouter,
+} = require("./APIs/istOfferingVas/routes/route");
+
+//istOfferingDataGiftGift
+const {
+  createListOfferingDataGiftGiftRouter,
+} = require("./APIs/listOfferingDataGiftGift/routes/route");
+
 //listOfferingDataGift
 const {
   createListOfferingDataGiftRouter,
@@ -98,7 +107,15 @@ app.use(
     publicBaseUrl,
   }),
 );
-
+//listOfferingVas
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingVasRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
 // TMF637 — Product collection
 app.use(
   INVENTORY_BASE_PATH,
@@ -106,6 +123,16 @@ app.use(
     Product,
     jwtAuth,
     getAuthorizedSubscriberIds,
+    publicBaseUrl,
+  }),
+);
+
+//listOfferingDataGiftGift
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingDataGiftGiftRouter({
+    ProductOffering,
+    jwtAuth,
     publicBaseUrl,
   }),
 );
