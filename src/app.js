@@ -24,6 +24,10 @@ const {
 const {
   createGetMyPackageRouter,
 } = require("./APIs/getMyPackage/routes/route");
+// TMF620 — retrieveOfferingBb
+const {
+  createRetrieveOfferingBbRouter,
+} = require("./APIs/retrieveOfferingBb/routes/route");
 
 // TMF620 — listOfferingAdv
 const {
@@ -70,6 +74,25 @@ async function getAuthorizedSubscriberIds(user) {
   return [];
 }
 
+//retrieveOfferingBb   Broadband offering retrieval — BEFORE generic catalog routes.
+app.use(
+  CATALOG_BASE_PATH,
+  createRetrieveOfferingBbRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
+
+// Existing catalog router also serves the extension schema.
+app.use(
+  CATALOG_BASE_PATH,
+  createListOfferingAdvRouter({
+    ProductOffering,
+    jwtAuth,
+    publicBaseUrl,
+  }),
+);
 // TMF620 — Catalog routes
 app.use(
   CATALOG_BASE_PATH,
