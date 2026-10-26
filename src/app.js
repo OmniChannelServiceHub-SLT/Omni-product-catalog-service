@@ -29,6 +29,11 @@ const {
   createRetrieveOfferingBbRouter,
 } = require("./APIs/retrieveOfferingBb/routes/route");
 
+// Custom — getDashboardVas
+const {
+  createGetDashboardVasRouter,
+} = require("./APIs/getDashboardVas/routes/route");
+
 // TMF620 — listOfferingAdv
 const {
   createListOfferingAdvRouter,
@@ -81,6 +86,15 @@ app.use(
     ProductOffering,
     jwtAuth,
     publicBaseUrl,
+  }),
+);
+//getDashboardVas
+app.use(
+  "/api",
+  createGetDashboardVasRouter({
+    Product,
+    jwtAuth,
+    getAuthorizedSubscriberIds,
   }),
 );
 
