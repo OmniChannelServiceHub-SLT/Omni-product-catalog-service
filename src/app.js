@@ -3,53 +3,173 @@
 const express = require("express");
 const cors = require("cors");
 
-// Shared models
 const Product = require("./models/TMF637_product");
 const ProductOffering = require("./models/TMF620_productOffering");
+const ServiceModel = require("./models/TMF638_service");
+const jwtAuth = require("./middleware/jwtAuth.middleware");
 
-// listProductOrderBb  Custom — Broadband Freedom request status
 const {
   createListProductOrderBbRouter,
 } = require("./APIs/listProductOrderBb/routes/route");
 
-// Shared authentication middleware
-const jwtAuth = require("./middleware/jwtAuth.middleware");
+const {
+  createListOfferingBbPkgRouter,
+} = require("./APIs/listOfferingBbPkg/routes/route");
 
-// TMF637 — retrieveSubscription
 const {
   createRetrieveSubscriptionRouter,
 } = require("./APIs/retrieveSubscription/routes/retrieveSubscription.router");
 
-// TMF637 — getMyPackage
 const {
   createGetMyPackageRouter,
 } = require("./APIs/getMyPackage/routes/route");
-// TMF620 — retrieveOfferingBb
+
 const {
   createRetrieveOfferingBbRouter,
 } = require("./APIs/retrieveOfferingBb/routes/route");
 
-// Custom — getDashboardVas
 const {
   createGetDashboardVasRouter,
 } = require("./APIs/getDashboardVas/routes/route");
 
-// TMF620 — listOfferingAdv
 const {
   createListOfferingAdvRouter,
 } = require("./APIs/listOfferingAdv/routes/route");
+
+const {
+  createRetrieveServiceRouter,
+} = require("./APIs/retrieveService/routes/route");
+
+const {
+  createPatchServiceRouter,
+} = require("./APIs/patchService/routes/route");
+
+// Load .env in server.js BEFORE importing app.js.
+const publicBaseUrl = process.env.BASE_URL;
+
+if (!publicBaseUrl) {
+  throw new Error("BASE_URL is required. Load .env before importing app.js.");
+}
+
+// Development-only subscriber access.
+const developmentAccess = new Map();
+
+if (
+  process.env.NODE_ENV === "development" &&
+  process.env.DEV_SUBSCRIBER_ACCESS
+) {
+  let configured;
+
+  try {
+    configured = JSON.parse(process.env.DEV_SUBSCRIBER_ACCESS);
+  } catch {
+    throw new Error("DEV_SUBSCRIBER_ACCESS must contain valid JSON.");
+  }
+
+  if (
+    !configured ||
+    typeof configured !== "object" ||
+    Array.isArray(configured)
+  ) {
+    throw new Error("DEV_SUBSCRIBER_ACCESS must be a JSON object.");
+  }
+
+  for (const [subject, ids] of Object.entries(configured)) {
+    if (
+      !subject.trim() ||
+      subject !== subject.trim() ||
+      !Array.isArray(ids) ||
+      ids.some(
+        (id) =>
+          typeof id !== "string" ||
+          !id.trim() ||
+          id !== id.trim() ||
+          id.length > 128,
+      )
+    ) {
+      throw new Error(
+        "DEV_SUBSCRIBER_ACCESS must map IAM user IDs to subscriber ID arrays.",
+      );
+    }
+
+    developmentAccess.set(subject, [...new Set(ids)]);
+  }
+}
+
+async function getAuthorizedSubscriberIds(user) {
+  if (process.env.NODE_ENV !== "development" || typeof user?.sub !== "string") {
+    return [];
+  }
+
+  const ids = developmentAccess.get(user.sub) || [];
+
+  if (process.env.DEBUG_SUBSCRIBER_ACCESS === "true") {
+    console.log("[subscriber-access]", {
+      userId: user.sub,
+      grantedSubscriberCount: ids.length,
+    });
+  }
+
+  return [...ids];
+}
+
+async function authorizeProduct(user, product) {
+  return (
+    typeof product?.subscriberId === "string" &&
+    (await getAuthorizedSubscriberIds(user)).includes(product.subscriberId)
+  );
+}
+
+// Freedom-status access: explicit development-only mock test grant.
+// Live telephone access remains denied until a trusted lookup is implemented.
+async function authorizeTelephone(user, telephoneNumber) {
+  return (
+    process.env.NODE_ENV === "development" &&
+    process.env.BB_FREEDOM_MODE === "mock" &&
+    typeof user?.sub === "string" &&
+    user.sub === process.env.BB_FREEDOM_TEST_USER_ID &&
+    telephoneNumber === "0000000000"
+  );
+}
+
+async function getLegacyAuthorization() {
+  return process.env.BB_FREEDOM_AUTHORIZATION;
+}
+
+// binding is private provisioning data, never populated from request bodies.
+async function authorizeService(user, service) {
+  return (
+    typeof user?.sub === "string" &&
+    typeof service.binding?.ownerSubject === "string" &&
+    user.sub === service.binding.ownerSubject
+  );
+}
+
+const voiceOptions = {
+  ServiceModel,
+  jwtAuth,
+  authorizeService,
+  publicBaseUrl,
+  providerMode: process.env.VOICE_PROVIDER_MODE || "disabled",
+  nodeEnv: process.env.NODE_ENV,
+  getLegacyAuthorization: async () => process.env.VOICE_LEGACY_AUTHORIZATION,
+};
 
 const app = express();
 
 app.use(
   cors({
-    exposedHeaders: ["X-Result-Count", "X-Total-Count"],
+    exposedHeaders: [
+      "X-Result-Count",
+      "X-Total-Count",
+      "Content-Location",
+      "Accept-Patch",
+    ],
   }),
 );
 
 app.use(express.json());
 
-// Health check
 app.get("/health", (req, res) => {
   return res.status(200).json({
     status: "ok",
@@ -57,38 +177,25 @@ app.get("/health", (req, res) => {
   });
 });
 
-// TMF API base paths
 const INVENTORY_BASE_PATH = "/tmf-api/productInventory/v4";
 const CATALOG_BASE_PATH = "/tmf-api/productCatalogManagement/v4";
+const SERVICE_BASE_PATH = "/tmf-api/serviceInventory/v5";
 
-const publicBaseUrl = process.env.BASE_URL;
+const catalogOptions = {
+  ProductOffering,
+  jwtAuth,
+  publicBaseUrl,
+};
 
-if (!publicBaseUrl) {
-  throw new Error("BASE_URL is required. Load .env before importing app.js.");
-}
+// Targeted catalog handlers before the generic catalog handler.
+app.use(CATALOG_BASE_PATH, createRetrieveOfferingBbRouter(catalogOptions));
 
-// Connect your actual product/account ownership policy here.
-// Access remains denied until the policy is implemented.
-async function authorizeProduct(user, product) {
-  return false;
-}
+app.use(CATALOG_BASE_PATH, createListOfferingBbPkgRouter(catalogOptions));
 
-// Return subscriber IDs that the authenticated user may access.
-// Connect this function to your server-side account lookup.
-async function getAuthorizedSubscriberIds(user) {
-  return [];
-}
+// This generic handler also serves listProductOffering requests.
+app.use(CATALOG_BASE_PATH, createListOfferingAdvRouter(catalogOptions));
 
-//retrieveOfferingBb   Broadband offering retrieval — BEFORE generic catalog routes.
-app.use(
-  CATALOG_BASE_PATH,
-  createRetrieveOfferingBbRouter({
-    ProductOffering,
-    jwtAuth,
-    publicBaseUrl,
-  }),
-);
-//getDashboardVas
+// Custom VAS dashboard.
 app.use(
   "/api",
   createGetDashboardVasRouter({
@@ -98,36 +205,7 @@ app.use(
   }),
 );
 
-// Existing catalog router also serves the extension schema.
-app.use(
-  CATALOG_BASE_PATH,
-  createListOfferingAdvRouter({
-    ProductOffering,
-    jwtAuth,
-    publicBaseUrl,
-  }),
-);
-// TMF620 — Catalog routes
-app.use(
-  CATALOG_BASE_PATH,
-  createListOfferingAdvRouter({
-    ProductOffering,
-    jwtAuth,
-    publicBaseUrl,
-  }),
-);
-
-// listProductOrderBb  Connect this to your server-side account ownership lookup.
-async function authorizeTelephone(user, telephoneNumber) {
-  return false;
-}
-
-// Obtain the Authorization header expected by the legacy provider.
-// Do not assume your IAM access token is accepted by the legacy API.
-async function getLegacyAuthorization() {
-  return process.env.BB_FREEDOM_AUTHORIZATION;
-}
-
+// Custom Freedom-request status.
 app.use(
   "/api",
   createListProductOrderBbRouter({
@@ -137,7 +215,7 @@ app.use(
   }),
 );
 
-// TMF637 — Product collection
+// TMF637 — Product collection.
 app.use(
   INVENTORY_BASE_PATH,
   createGetMyPackageRouter({
@@ -148,7 +226,7 @@ app.use(
   }),
 );
 
-// TMF637 — Product ID retrieval
+// TMF637 — Product ID retrieval.
 app.use(
   INVENTORY_BASE_PATH,
   createRetrieveSubscriptionRouter({
@@ -159,9 +237,13 @@ app.use(
   }),
 );
 
-// Register additional API routes ABOVE this handler.
+// TMF638 v5 — Service retrieval.
+app.use(SERVICE_BASE_PATH, createRetrieveServiceRouter(voiceOptions));
 
-// 404 fallback
+// TMF638 v5 — Service update.
+app.use(SERVICE_BASE_PATH, createPatchServiceRouter(voiceOptions));
+
+// 404 fallback.
 app.use((req, res) => {
   return res.status(404).json({
     code: "404",
@@ -172,7 +254,7 @@ app.use((req, res) => {
   });
 });
 
-// Shared error handler
+// Shared error handler.
 app.use((error, req, res, next) => {
   if (res.headersSent) {
     return next(error);
@@ -196,7 +278,9 @@ app.use((error, req, res, next) => {
     415: "Unsupported Media Type",
     429: "Too Many Requests",
     500: "Internal Server Error",
+    502: "Bad Gateway",
     503: "Service Unavailable",
+    504: "Gateway Timeout",
   };
 
   if (status === 401) {
@@ -209,7 +293,7 @@ app.use((error, req, res, next) => {
     message:
       status >= 500
         ? "An unexpected server error occurred."
-        : reasons[status] || "The request could not be processed.",
+        : error.message || reasons[status] || "Request Failed",
     status: String(status),
     "@type": "Error",
   });
