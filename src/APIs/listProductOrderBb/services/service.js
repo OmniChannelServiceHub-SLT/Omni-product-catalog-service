@@ -45,6 +45,18 @@ function createListProductOrderBbService({
     if (allowed !== true) {
       throw fail(403, "Access to this telephone number is denied.");
     }
+    // Development-only mock: no legacy API call is made.
+    if (process.env.BB_FREEDOM_MODE === "mock") {
+      if (process.env.NODE_ENV !== "development" || tpNo !== "0000000000") {
+        throw fail(403, "Mock access is restricted to the test telephone.");
+      }
+
+      return {
+        telephoneNumber: tpNo,
+        freedomRequested: true,
+        message: "Synthetic local mock response; no SLT API was called.",
+      };
+    }
 
     // Credentials for the legacy API are obtained server-side.
     const authorization = await getLegacyAuthorization();
