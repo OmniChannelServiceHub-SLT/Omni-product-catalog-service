@@ -4,6 +4,7 @@ const OFFERING_TYPES = [
   "vasAddon",
   "broadbandPackage",
   "peoPackage",
+  "voicePackage",
   "dataGift",
   "dataGiftMobile",
   "advancedReporting",
@@ -242,6 +243,25 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
         minCardinality: 1,
         maxCardinality: 1,
         productSpecCharacteristicValue: [value],
+        "@type": "ProductSpecificationCharacteristicValueUse",
+      });
+    }
+    for (const [name, key] of [
+      ["includedCallAllowance", "includedCallAllowance"],
+      ["phoneUnitOwnership", "phoneUnitOwnership"],
+    ]) {
+      if (typeof record[key] !== "string") continue;
+      characteristics.push({
+        name,
+        valueType: "string",
+        minCardinality: 1,
+        maxCardinality: 1,
+        productSpecCharacteristicValue: [
+          {
+            value: record[key],
+            "@type": "ProductSpecificationCharacteristicValue",
+          },
+        ],
         "@type": "ProductSpecificationCharacteristicValueUse",
       });
     }

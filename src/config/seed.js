@@ -91,6 +91,26 @@ const peoPackages = peoPackageSource.map(
   }),
 );
 
+// ---- voicePackage (source: A106 GetVoicePackagesInterim sample) ----
+const voicePackageSource = [
+  ['VOICE-FTTH-SECOND-LINE', 'FTTH 2nd Line - My Phone', 'Rs.160 worth of On net calls', 160, 'Customer'],
+  ['VOICE-HOME-FIRST-LINE', 'Home 1st Line - My Phone', 'Rs.390 worth of On net calls', 390, 'Customer'],
+  ['VOICE-OFFICE-FIRST-LINE', 'Office 1st Line', 'N/A', 630, 'SLT'],
+];
+
+const voicePackages = voicePackageSource.map(
+  ([packageId, name, includedCallAllowance, monthlyRental, phoneUnitOwnership], index) => ({
+    offeringType: 'voicePackage',
+    packageId,
+    name,
+    accessType: 'ADSL',
+    tier: index + 1,
+    includedCallAllowance,
+    monthlyRental,
+    phoneUnitOwnership,
+  }),
+);
+
 // ---- advancedReporting (source: sheet "49", real sample) ----
 const advancedReportingPackages = [
   { offeringType: 'advancedReporting', packageId: '1', name: 'Monthly Subscription', description: '40 LKR', prePrice: '40', postPrice: '40', taxValue: '4.08128' },
@@ -145,7 +165,7 @@ async function seed() {
   await connectDB();
 
   await TMF620_ProductOffering.deleteMany({});
-  const offerings = [...vasAddons, ...broadbandPackages, ...peoPackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
+  const offerings = [...vasAddons, ...broadbandPackages, ...peoPackages, ...voicePackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
   await TMF620_ProductOffering.insertMany(offerings);
   console.log(`Seeded ${offerings.length} TMF620_ProductOffering documents.`);
 
