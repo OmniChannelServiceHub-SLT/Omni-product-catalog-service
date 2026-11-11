@@ -36,6 +36,7 @@ const productOfferingSchema = new mongoose.Schema(
 
     // broadbandPackage-only fields
     packageType: { type: String }, // ADSL, SLT Fiber, SLT 4G
+    packageGroup: { type: String }, // Standard, Any, Unlimited
     tier: { type: Number }, // rank within packageType, used for upgrade/downgrade
     monthlyRental: { type: Number },
     standardGB: { type: Number },

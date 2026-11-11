@@ -20,30 +20,52 @@ const vasAddons = [
 ];
 
 // ---- broadbandPackage (source: sheets "75" / "76") ----
-const downgrades = ['Abhimana|ADSL-AB', 'Entree|ADSL-ENT', 'Student 01|ADSL-ST1', 'Student 02|ADSL-ST2', 'Web Lite|ADSL-WLT', 'Web Starter|ADSL-WS', 'Web Pal|ADSL-WP'];
-const upgrades = ['Web Family Xtra|ADSL-WFX', 'Web Pro|ADSL-WPR', 'Web Master|ADSL-WM', 'Web Champ|ADSL-WC', 'Web Life|ADSL-WL', 'Web Inspire|ADSL-WI', 'Web Premier|ADSL-WPM', 'Web Family Active|ADSL-WFA', 'Web Booster|ADSL-WB', 'Any Joy|ADSL-AJOY', 'Any Beat|ADSL-ABEA', 'Any Flix|ADSL-AFLI', 'Any Blaze|ADSL-ABLA', 'Any Tide|ADSL-ATID', 'Any Spike|ADSL-ASPI', 'Any Storm|ADSL-ASTO', 'Any Glam|ADSL-AGLA', 'Any Delight|ADSL-ADEL', 'Any Xtreme|ADSL-AXTR'];
-
-function toOfferings(list, startTier) {
-  return list.map((s, i) => {
-    const [name, code] = s.split('|');
-    return { offeringType: 'broadbandPackage', packageId: code, name, packageType: 'ADSL', tier: startTier + i };
-  });
-}
-
-const broadbandPackages = [
-  ...toOfferings(downgrades, 1),
-  {
-    offeringType: 'broadbandPackage',
-    packageId: 'ADSL-WFP',
-    name: 'Web Family Plus',
-    packageType: 'ADSL',
-    tier: downgrades.length + 1,
-    monthlyRental: 1490,
-    standardGB: 36,
-    freeGB: 54,
-  },
-  ...toOfferings(upgrades, downgrades.length + 2),
+const broadbandSource = [
+  ['ADSL-AB', 'Abhimana', 'Standard', 390, 6, 0],
+  ['ADSL-ST1', 'Student 01', 'Standard', 390, 4, 6],
+  ['ADSL-WLT', 'Web Lite', 'Standard', 450, 6, 9],
+  ['ADSL-ENT', 'Entree', 'Standard', 499, 7, 0],
+  ['ADSL-WS', 'Web Starter', 'Standard', 740, 11, 17],
+  ['ADSL-ST2', 'Student 02', 'Standard', 790, 12, 18],
+  ['ADSL-WP', 'Web Pal', 'Standard', 990, 18, 27],
+  ['ADSL-WFP', 'Web Family Plus', 'Standard', 1490, 36, 54],
+  ['ADSL-WFA', 'Web Family Active', 'Standard', 1990, 45, 65],
+  ['ADSL-WFX', 'Web Family Xtra', 'Standard', 2690, 60, 90],
+  ['ADSL-WB', 'Web Booster', 'Standard', 3490, 75, 110],
+  ['ADSL-WPR', 'Web Pro', 'Standard', 4890, 95, 140],
+  ['ADSL-WM', 'Web Master', 'Standard', 8890, 170, 255],
+  ['ADSL-WC', 'Web Champ', 'Standard', 13690, 270, 405],
+  ['ADSL-WL', 'Web Life', 'Standard', 19890, 400, 600],
+  ['ADSL-WI', 'Web Inspire', 'Standard', 33000, 700, 1000],
+  ['ADSL-WPM', 'Web Premier', 'Standard', 58000, 1250, 1750],
+  ['ADSL-AJOY', 'Any Joy', 'Any', 890, 22, 0],
+  ['ADSL-ABEA', 'Any Beat', 'Any', 1290, 36, 0],
+  ['ADSL-AFLI', 'Any Flix', 'Any', 1790, 53, 0],
+  ['ADSL-ABLA', 'Any Blaze', 'Any', 2490, 72, 0],
+  ['ADSL-ATID', 'Any Tide', 'Any', 3390, 100, 0],
+  ['ADSL-ASPI', 'Any Spike', 'Any', 4390, 130, 0],
+  ['ADSL-ASTO', 'Any Storm', 'Any', 6790, 200, 0],
+  ['ADSL-AGLA', 'Any Glam', 'Any', 11790, 350, 0],
+  ['ADSL-ADEL', 'Any Delight', 'Any', 16790, 500, 0],
+  ['ADSL-AXTR', 'Any Xtreme', 'Any', 25000, 750, 0],
+  ['ADSL-UNL-2', 'ADSL Unlimited 2', 'Unlimited', 2450, 0, 0],
+  ['ADSL-UNL-4', 'ADSL Unlimited 4', 'Unlimited', 4450, 0, 0],
+  ['ADSL-UNL-8', 'ADSL Unlimited 8', 'Unlimited', 5750, 0, 0],
 ];
+
+const broadbandPackages = broadbandSource.map(
+  ([packageId, name, packageGroup, monthlyRental, standardGB, freeGB], index) => ({
+    offeringType: 'broadbandPackage',
+    packageId,
+    name,
+    packageType: 'ADSL',
+    packageGroup,
+    tier: index + 1,
+    monthlyRental,
+    standardGB,
+    freeGB,
+  }),
+);
 
 // ---- advancedReporting (source: sheet "49", real sample) ----
 const advancedReportingPackages = [
@@ -108,7 +130,7 @@ async function seed() {
   await TMF637_Product.insertMany(products);
   console.log(`Seeded ${products.length} TMF637_Product documents.`);
 
-  console.log('Done. Only ADSL-WFP has real monthlyRental/standardGB/freeGB values.');
+  console.log('Done. ADSL broadband package values come from the A104 source sample.');
   console.log('dataGiftPackages/dataGiftPackagesMobile are placeholder data - no real sample existed in the source sheet.');
 
   await mongoose.disconnect();

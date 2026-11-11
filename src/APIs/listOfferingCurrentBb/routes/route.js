@@ -32,7 +32,7 @@ function createListOfferingCurrentBbRouter({
   router.get(
     "/productOffering",
     (req, res, next) => {
-      if (!("packageType" in req.query) && !("name" in req.query)) {
+      if (!("packageType" in req.query) || !("name" in req.query)) {
         return next("router");
       }
       return next();

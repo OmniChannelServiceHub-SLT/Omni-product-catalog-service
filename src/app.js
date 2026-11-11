@@ -33,6 +33,10 @@ const {
 } = require("./APIs/listOfferingCurrentBb/routes/route");
 
 const {
+  createGetBbPackagesInterimRouter,
+} = require("./APIs/getBbPackagesInterim/routes/route");
+
+const {
   createGetDashboardVasRouter,
 } = require("./APIs/getDashboardVas/routes/route");
 
@@ -195,6 +199,8 @@ const catalogOptions = {
 app.use(CATALOG_BASE_PATH, createRetrieveOfferingBbRouter(catalogOptions));
 
 app.use(CATALOG_BASE_PATH, createListOfferingBbPkgRouter(catalogOptions));
+
+app.use(CATALOG_BASE_PATH, createGetBbPackagesInterimRouter(catalogOptions));
 
 app.use(CATALOG_BASE_PATH, createListOfferingCurrentBbRouter(catalogOptions));
 
