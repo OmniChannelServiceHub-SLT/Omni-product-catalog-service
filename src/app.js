@@ -25,6 +25,10 @@ const {
 } = require("./APIs/getMyPackage/routes/route");
 
 const {
+  createListProductRouter,
+} = require("./APIs/listProduct/routes/route");
+
+const {
   createRetrieveOfferingBbRouter,
 } = require("./APIs/retrieveOfferingBb/routes/route");
 
@@ -246,6 +250,16 @@ app.use(
 );
 
 // TMF637 — Product collection.
+app.use(
+  INVENTORY_BASE_PATH,
+  createListProductRouter({
+    Product,
+    jwtAuth,
+    getAuthorizedSubscriberIds,
+    publicBaseUrl,
+  }),
+);
+
 app.use(
   INVENTORY_BASE_PATH,
   createGetMyPackageRouter({
