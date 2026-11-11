@@ -26,6 +26,8 @@ const productOfferingSchema = new mongoose.Schema(
     prePrice: { type: String },
     postPrice: { type: String },
     taxValue: { type: String },
+    prePaidTax: { type: String },
+    postPaidTax: { type: String },
 
     // vasAddon-only extras
     payable: { type: Boolean, default: undefined },
@@ -33,6 +35,7 @@ const productOfferingSchema = new mongoose.Schema(
     postPaidAllowed: { type: Boolean, default: undefined },
     iconUrl: { type: String },
     colorCode: { type: String },
+    recurring: { type: Boolean, default: undefined },
 
     // broadbandPackage-only fields
     packageType: { type: String }, // ADSL, SLT Fiber, SLT 4G
