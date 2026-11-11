@@ -5,6 +5,7 @@ const OFFERING_TYPES = [
   "broadbandPackage",
   "peoPackage",
   "voicePackage",
+  "peoVasProduct",
   "dataGift",
   "dataGiftMobile",
   "advancedReporting",

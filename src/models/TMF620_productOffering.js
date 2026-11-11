@@ -15,7 +15,7 @@ const productOfferingSchema = new mongoose.Schema(
     offeringType: {
       type: String,
       required: true,
-      enum: ['vasAddon', 'broadbandPackage', 'peoPackage', 'voicePackage', 'dataGift', 'dataGiftMobile', 'advancedReporting'],
+      enum: ['vasAddon', 'broadbandPackage', 'peoPackage', 'voicePackage', 'peoVasProduct', 'dataGift', 'dataGiftMobile', 'advancedReporting'],
     },
     packageId: { type: String, required: true }, // addon id / catalog package id / BB package code
     name: { type: String, required: true },

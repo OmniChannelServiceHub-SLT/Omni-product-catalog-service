@@ -111,6 +111,37 @@ const voicePackages = voicePackageSource.map(
   }),
 );
 
+// ---- peoVasProduct (source: A119 GetAvailableProducts sample) ----
+const peoVasProductSource = [
+  ['P03541', 'Bollywood by Shemaroo'],
+  ['P02822', 'Cinema Talkies'],
+  ['P02398', 'CinemaWorld On Demand'],
+  ['P04271', 'Discovery HD'],
+  ['P04287', 'HBO On Demand HD'],
+  ['P04021', 'Helawood Tharakawalokana'],
+  ['P04282', 'Infotainment HD Bouquet'],
+  ['P04283', 'Lifestyle HD Bouquet'],
+  ['P03741', 'Sangamam TV'],
+  ['P04268', 'Sony Six HD'],
+  ['P04270', 'Sony Ten 1 HD'],
+  ['P04269', 'Sony Ten 2 HD'],
+  ['P04284', 'Sports HD Bouquet'],
+  ['P02790', 'Staff Tamil Premium Bouquet'],
+  ['P04161', 'Subha Sathiya'],
+  ['P04241', 'TMT Mix'],
+  ['P04001', 'TOONZ'],
+  ['P04281', 'Ten cricket HD'],
+  ['P03981', 'Videsa 5'],
+];
+
+const peoVasProducts = peoVasProductSource.map(([packageId, name], index) => ({
+  offeringType: 'peoVasProduct',
+  packageId,
+  name,
+  category: 'PEO TV VAS',
+  tier: index + 1,
+}));
+
 // ---- advancedReporting (source: sheet "49", real sample) ----
 const advancedReportingPackages = [
   { offeringType: 'advancedReporting', packageId: '1', name: 'Monthly Subscription', description: '40 LKR', prePrice: '40', postPrice: '40', taxValue: '4.08128' },
@@ -165,7 +196,7 @@ async function seed() {
   await connectDB();
 
   await TMF620_ProductOffering.deleteMany({});
-  const offerings = [...vasAddons, ...broadbandPackages, ...peoPackages, ...voicePackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
+  const offerings = [...vasAddons, ...broadbandPackages, ...peoPackages, ...voicePackages, ...peoVasProducts, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
   await TMF620_ProductOffering.insertMany(offerings);
   console.log(`Seeded ${offerings.length} TMF620_ProductOffering documents.`);
 
