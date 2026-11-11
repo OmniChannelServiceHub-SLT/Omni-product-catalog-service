@@ -15,7 +15,7 @@ const productOfferingSchema = new mongoose.Schema(
     offeringType: {
       type: String,
       required: true,
-      enum: ['vasAddon', 'broadbandPackage', 'dataGift', 'dataGiftMobile', 'advancedReporting'],
+      enum: ['vasAddon', 'broadbandPackage', 'peoPackage', 'dataGift', 'dataGiftMobile', 'advancedReporting'],
     },
     packageId: { type: String, required: true }, // addon id / catalog package id / BB package code
     name: { type: String, required: true },
@@ -37,6 +37,8 @@ const productOfferingSchema = new mongoose.Schema(
     // broadbandPackage-only fields
     packageType: { type: String }, // ADSL, SLT Fiber, SLT 4G
     packageGroup: { type: String }, // Standard, Any, Unlimited
+    accessType: { type: String }, // Access mode supported by an interim package
+    channelCount: { type: Number }, // PEO TV package channel count
     tier: { type: Number }, // rank within packageType, used for upgrade/downgrade
     monthlyRental: { type: Number },
     standardGB: { type: Number },

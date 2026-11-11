@@ -3,6 +3,7 @@
 const OFFERING_TYPES = [
   "vasAddon",
   "broadbandPackage",
+  "peoPackage",
   "dataGift",
   "dataGiftMobile",
   "advancedReporting",
@@ -40,6 +41,10 @@ const FIELDS = new Set([
   "offeringType",
   "packageId",
   "categoryLabel",
+  "packageType",
+  "packageGroup",
+  "accessType",
+  "channelCount",
   "legacyPricing",
 ]);
 
@@ -62,6 +67,10 @@ const extensionSchema = {
       enum: OFFERING_TYPES,
     },
     packageId: { type: "string" },
+    packageType: { type: "string" },
+    packageGroup: { type: "string" },
+    accessType: { type: "string" },
+    channelCount: { type: "number" },
     categoryLabel: { type: "string" },
     legacyPricing: {
       type: "object",
@@ -167,6 +176,14 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
       result.description = record.description;
     }
 
+    for (const key of ["packageType", "packageGroup", "accessType"]) {
+      if (typeof record[key] === "string") result[key] = record[key];
+    }
+
+    if (Number.isFinite(record.channelCount)) {
+      result.channelCount = record.channelCount;
+    }
+
     if (record.updatedAt) {
       const updated = new Date(record.updatedAt);
 
@@ -194,6 +211,41 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
     if (Object.keys(legacyPricing).length) {
       result.legacyPricing = legacyPricing;
     }
+
+    if (Number.isFinite(record.monthlyRental)) {
+      result.productOfferingPrice = [
+        {
+          name: "Monthly rental",
+          priceType: "recurring",
+          recurringChargePeriod: "month",
+          price: { unit: "LKR", value: record.monthlyRental },
+          "@type": "ProductOfferingPrice",
+        },
+      ];
+    }
+
+    const characteristics = [];
+    for (const [name, key, unitOfMeasure] of [
+      ["standardDataAllowance", "standardGB", "GB"],
+      ["freeDataAllowance", "freeGB", "GB"],
+      ["channelCount", "channelCount", undefined],
+    ]) {
+      if (!Number.isFinite(record[key])) continue;
+      const value = {
+        value: record[key],
+        "@type": "ProductSpecificationCharacteristicValue",
+      };
+      if (unitOfMeasure) value.unitOfMeasure = unitOfMeasure;
+      characteristics.push({
+        name,
+        valueType: "number",
+        minCardinality: 1,
+        maxCardinality: 1,
+        productSpecCharacteristicValue: [value],
+        "@type": "ProductSpecificationCharacteristicValueUse",
+      });
+    }
+    if (characteristics.length) result.prodSpecCharValueUse = characteristics;
 
     if (!chosen) return result;
 

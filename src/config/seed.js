@@ -67,6 +67,30 @@ const broadbandPackages = broadbandSource.map(
   }),
 );
 
+// ---- peoPackage (source: A105 GetPEOPackagesInterim sample) ----
+const peoPackageSource = [
+  ['PEO-SILVER', 'PEO Silver', 59, 899],
+  ['PEO-UNNATHAM', 'PEO Unnatham', 79, 899],
+  ['PEO-SILVER-PLUS', 'PEO Silver Plus', 85, 1099],
+  ['PEO-FAMILY', 'PEO Family', 86, 1299],
+  ['PEO-GOLD', 'PEO Gold', 98, 1499],
+  ['PEO-ENTERTAINMENT', 'PEO Entertainment', 88, 1499],
+  ['PEO-PLATINUM', 'PEO Platinum', 105, 1899],
+  ['PEO-TITANIUM', 'PEO Titanium', 120, 2099],
+];
+
+const peoPackages = peoPackageSource.map(
+  ([packageId, name, channelCount, monthlyRental], index) => ({
+    offeringType: 'peoPackage',
+    packageId,
+    name,
+    accessType: 'ADSL',
+    tier: index + 1,
+    channelCount,
+    monthlyRental,
+  }),
+);
+
 // ---- advancedReporting (source: sheet "49", real sample) ----
 const advancedReportingPackages = [
   { offeringType: 'advancedReporting', packageId: '1', name: 'Monthly Subscription', description: '40 LKR', prePrice: '40', postPrice: '40', taxValue: '4.08128' },
@@ -121,7 +145,7 @@ async function seed() {
   await connectDB();
 
   await TMF620_ProductOffering.deleteMany({});
-  const offerings = [...vasAddons, ...broadbandPackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
+  const offerings = [...vasAddons, ...broadbandPackages, ...peoPackages, ...advancedReportingPackages, ...dataGiftPackages, ...dataGiftPackagesMobile];
   await TMF620_ProductOffering.insertMany(offerings);
   console.log(`Seeded ${offerings.length} TMF620_ProductOffering documents.`);
 
