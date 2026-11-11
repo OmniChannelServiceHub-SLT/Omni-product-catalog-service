@@ -29,6 +29,10 @@ const {
 } = require("./APIs/retrieveOfferingBb/routes/route");
 
 const {
+  createListOfferingCurrentBbRouter,
+} = require("./APIs/listOfferingCurrentBb/routes/route");
+
+const {
   createGetDashboardVasRouter,
 } = require("./APIs/getDashboardVas/routes/route");
 
@@ -191,6 +195,8 @@ const catalogOptions = {
 app.use(CATALOG_BASE_PATH, createRetrieveOfferingBbRouter(catalogOptions));
 
 app.use(CATALOG_BASE_PATH, createListOfferingBbPkgRouter(catalogOptions));
+
+app.use(CATALOG_BASE_PATH, createListOfferingCurrentBbRouter(catalogOptions));
 
 // This generic handler also serves listProductOffering requests.
 app.use(CATALOG_BASE_PATH, createListOfferingAdvRouter(catalogOptions));
