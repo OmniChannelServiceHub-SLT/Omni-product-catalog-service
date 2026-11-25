@@ -1,0 +1,9 @@
+{
+  "url": "http://host.docker.internal:13006/tmf-api/productInventory/v4/",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdGsiLCJpYXQiOjE3OTU1OTU5OTksImV4cCI6MTc5NTU5Njg5OSwiYXVkIjoibG9jYWwtY3RrIiwiaXNzIjoibG9jYWwtY3RrIn0.JDdae4w-tSlREN-yXTNxYogRXYSqyLNT9eZWuSD1R9s"
+  },
+  "payloads": {}
+}

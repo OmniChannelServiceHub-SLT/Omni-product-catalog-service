@@ -1,0 +1,21 @@
+{
+  "url": "http://host.docker.internal:13005/tmf-api/serviceInventory/v4/",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdGsiLCJpYXQiOjE3OTU1OTUxNTIsImV4cCI6MTc5NTU5NjA1MiwiYXVkIjoibG9jYWwtY3RrIiwiaXNzIjoibG9jYWwtY3RrIn0.PBnQjtDkJxmEI8mT9KgOUoPv-TlLqOKooNQbbyfq6z0"
+  },
+  "payloads": {
+    "Service": {
+      "POST": {
+        "payload": {
+          "state": "active",
+          "serviceSpecification": {
+            "id": "1212",
+            "@referredType": "ServiceSpecification"
+          }
+        }
+      }
+    }
+  }
+}

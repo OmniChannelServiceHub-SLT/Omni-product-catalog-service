@@ -177,6 +177,9 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
     if (typeof record.description === "string") {
       result.description = record.description;
     }
+    if (typeof record.lifecycleStatus === "string") {
+      result.lifecycleStatus = record.lifecycleStatus;
+    }
 
     for (const key of ["packageType", "packageGroup", "accessType"]) {
       if (typeof record[key] === "string") result[key] = record[key];
@@ -310,6 +313,8 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
       "name",
       "id",
       "packageId",
+      "lastUpdate",
+      "lifecycleStatus",
     ]);
 
     if (Object.keys(query).some((key) => !allowed.has(key))) {
@@ -322,7 +327,7 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
 
     const filter = {};
 
-    for (const key of ["offeringType", "name", "id", "packageId"]) {
+    for (const key of ["offeringType", "name", "id", "packageId", "lastUpdate", "lifecycleStatus"]) {
       const value = query[key];
 
       if (value === undefined) continue;
@@ -341,6 +346,12 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
         }
 
         filter._id = value;
+      } else if (key === "lastUpdate") {
+        const updatedAt = new Date(value);
+        if (!Number.isFinite(updatedAt.getTime())) {
+          throw fail(400, "lastUpdate must be a valid date-time.");
+        }
+        filter.updatedAt = updatedAt;
       } else {
         filter[key] = value;
       }

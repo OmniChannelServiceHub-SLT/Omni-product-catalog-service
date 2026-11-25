@@ -1,0 +1,505 @@
+conformance:
+
+  resources:
+   - TroubleTicketSpecification
+   - TroubleTicket
+   - Hub
+
+  notifications:
+   - TroubleTicketAttributeValueChangeEvent
+   - TroubleTicketSpecificationCreateEvent
+   - TroubleTicketSpecificationDeleteEvent
+   - TroubleTicketSpecificationStatusChangeEvent
+   - TroubleTicketResolvedEvent
+   - TroubleTicketDeleteEvent
+   - TroubleTicketInformationRequiredEvent
+   - TroubleTicketSpecificationAttributeValueChangeEvent
+   - TroubleTicketCreateEvent
+   - TroubleTicketStatusChangeEvent
+
+  Hub:
+    condition: ""
+    comment: ""
+    operations:
+      POST:
+        condition: ""
+        comment: ""
+      DELETE:
+        condition: ""
+        comment: ""
+    attributes:
+      callback:
+        condition: M
+        comment: ""
+      id:
+        condition: ""
+        comment: ""
+      query:
+        condition: ""
+        comment: ""
+    operations-details:
+      POST:
+        mandatory: {}
+      PATCH:
+        patchable: {}
+        non-patchable:
+          callback:
+            rule: ""
+          id:
+            rule: ""
+          query:
+            rule: ""
+
+  TroubleTicket:
+    condition: M
+    comment: ""
+    operations:
+      GET:
+        condition: M
+        comment: ""
+      POST:
+        condition: M
+        comment: ""
+      PATCH:
+        condition: M
+        comment: ""
+      DELETE:
+        condition: M
+        comment: ""
+    attributes:
+      attachment:
+        condition: ""
+        comment: Array of AttachmentRefOrValue
+      channel:
+        condition: ""
+        comment: ""
+      creationDate:
+        condition: ""
+        comment: ""
+      description:
+        condition: M
+        comment: ""
+      expectedResolutionDate:
+        condition: ""
+        comment: ""
+      externalIdentifier:
+        condition: ""
+        comment: Array of ExternalIdentifier
+      externalIdentifier.externalIdentifierType:
+        condition: ""
+        comment: ""
+      externalIdentifier.id:
+        condition: M
+        comment: ""
+      externalIdentifier.owner:
+        condition: ""
+        comment: ""
+      lastUpdate:
+        condition: ""
+        comment: ""
+      name:
+        condition: ""
+        comment: ""
+      note:
+        condition: ""
+        comment: Array of Note
+      note.author:
+        condition: ""
+        comment: ""
+      note.date:
+        condition: ""
+        comment: ""
+      note.id:
+        condition: ""
+        comment: ""
+      note.text:
+        condition: ""
+        comment: ""
+      priority:
+        condition: ""
+        comment: ""
+      relatedEntity:
+        condition: ""
+        comment: Array of RelatedEntity
+      relatedEntity.entity:
+        condition: M
+        comment: ""
+      relatedEntity.entity.@referredType:
+        condition: ""
+        comment: ""
+      relatedEntity.entity.href:
+        condition: ""
+        comment: ""
+      relatedEntity.entity.id:
+        condition: M
+        comment: ""
+      relatedEntity.entity.name:
+        condition: ""
+        comment: ""
+      relatedEntity.role:
+        condition: M
+        comment: ""
+      relatedParty:
+        condition: ""
+        comment: Array of RelatedPartyRefOrPartyRoleRef
+      relatedParty.partyOrPartyRole:
+        condition: ""
+        comment: ""
+      relatedParty.role:
+        condition: M
+        comment: ""
+      requestedResolutionDate:
+        condition: ""
+        comment: ""
+      resolutionDate:
+        condition: ""
+        comment: ""
+      severity:
+        condition: M
+        comment: ""
+      status:
+        condition: ""
+        comment: ""
+      statusChangeDate:
+        condition: ""
+        comment: ""
+      statusChangeHistory:
+        condition: ""
+        comment: Array of StatusChange
+      statusChangeHistory.status:
+        condition: ""
+        comment: ""
+      statusChangeHistory.statusChangeDate:
+        condition: ""
+        comment: ""
+      statusChangeHistory.statusChangeReason:
+        condition: ""
+        comment: ""
+      statusChangeReason:
+        condition: ""
+        comment: ""
+      ticketType:
+        condition: M
+        comment: ""
+      troubleTicketCharacteristic:
+        condition: ""
+        comment: Array of Characteristic
+      troubleTicketCharacteristic.characteristicRelationship:
+        condition: ""
+        comment: Array of CharacteristicRelationship
+      troubleTicketCharacteristic.characteristicRelationship.id:
+        condition: M
+        comment: ""
+      troubleTicketCharacteristic.characteristicRelationship.relationshipType:
+        condition: M
+        comment: ""
+      troubleTicketCharacteristic.id:
+        condition: ""
+        comment: ""
+      troubleTicketCharacteristic.name:
+        condition: M
+        comment: ""
+      troubleTicketCharacteristic.valueType:
+        condition: ""
+        comment: ""
+      troubleTicketRelationship:
+        condition: ""
+        comment: Array of TroubleTicketRelationship
+      troubleTicketRelationship.id:
+        condition: M
+        comment: ""
+      troubleTicketRelationship.name:
+        condition: ""
+        comment: ""
+      troubleTicketRelationship.relationshipType:
+        condition: M
+        comment: ""
+      troubleTicketSpecification:
+        condition: ""
+        comment: ""
+      troubleTicketSpecification.version:
+        condition: ""
+        comment: ""
+    operations-details:
+      POST:
+        mandatory:
+          description:
+            rule: ""
+          severity:
+            rule: ""
+          ticketType:
+            rule: ""
+      PATCH:
+        patchable:
+          attachment:
+            rule: ""
+          channel:
+            rule: ""
+          description:
+            rule: ""
+          expectedResolutionDate:
+            rule: ""
+          externalIdentifier:
+            rule: ""
+          lastUpdate:
+            rule: ""
+          name:
+            rule: ""
+          note:
+            rule: ""
+          priority:
+            rule: ""
+          relatedEntity:
+            rule: ""
+          relatedParty:
+            rule: ""
+          requestedResolutionDate:
+            rule: ""
+          resolutionDate:
+            rule: ""
+          severity:
+            rule: ""
+          status:
+            rule: ""
+          statusChangeHistory:
+            rule: ""
+          statusChangeReason:
+            rule: ""
+          ticketType:
+            rule: ""
+          troubleTicketCharacteristic:
+            rule: ""
+          troubleTicketRelationship:
+            rule: ""
+          troubleTicketSpecification:
+            rule: ""
+        non-patchable:
+          creationDate:
+            rule: ""
+          statusChangeDate:
+            rule: ""
+
+  TroubleTicketAttributeValueChangeEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketCreateEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketDeleteEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketInformationRequiredEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketResolvedEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketSpecification:
+    condition: M
+    comment: ""
+    operations:
+      GET:
+        condition: ""
+        comment: ""
+      POST:
+        condition: ""
+        comment: ""
+      PATCH:
+        condition: ""
+        comment: ""
+      DELETE:
+        condition: ""
+        comment: ""
+    attributes:
+      creationDate:
+        condition: ""
+        comment: ""
+      description:
+        condition: ""
+        comment: ""
+      lastUpdate:
+        condition: ""
+        comment: ""
+      lifecycleStatus:
+        condition: ""
+        comment: ""
+      name:
+        condition: M
+        comment: ""
+      relatedParty:
+        condition: ""
+        comment: Array of RelatedPartyRefOrPartyRoleRef
+      relatedParty.partyOrPartyRole:
+        condition: ""
+        comment: ""
+      relatedParty.role:
+        condition: M
+        comment: ""
+      specCharacteristic:
+        condition: ""
+        comment: Array of CharacteristicSpecification
+      specCharacteristic.@valueSchemaLocation:
+        condition: ""
+        comment: ""
+      specCharacteristic.charSpecRelationship:
+        condition: ""
+        comment: Array of CharacteristicSpecificationRelationship
+      specCharacteristic.charSpecRelationship.characteristicSpecificationId:
+        condition: ""
+        comment: ""
+      specCharacteristic.charSpecRelationship.name:
+        condition: M
+        comment: ""
+      specCharacteristic.charSpecRelationship.parentSpecificationHref:
+        condition: ""
+        comment: ""
+      specCharacteristic.charSpecRelationship.parentSpecificationId:
+        condition: M
+        comment: ""
+      specCharacteristic.charSpecRelationship.relationshipType:
+        condition: M
+        comment: ""
+      specCharacteristic.charSpecRelationship.validFor:
+        condition: ""
+        comment: ""
+      specCharacteristic.charSpecRelationship.validFor.endDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.charSpecRelationship.validFor.startDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification:
+        condition: ""
+        comment: Array of CharacteristicValueSpecification
+      specCharacteristic.characteristicValueSpecification.isDefault:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.rangeInterval:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.regex:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.unitOfMeasure:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.validFor:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.validFor.endDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.validFor.startDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.valueFrom:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.valueTo:
+        condition: ""
+        comment: ""
+      specCharacteristic.characteristicValueSpecification.valueType:
+        condition: ""
+        comment: ""
+      specCharacteristic.configurable:
+        condition: ""
+        comment: ""
+      specCharacteristic.description:
+        condition: ""
+        comment: ""
+      specCharacteristic.extensible:
+        condition: ""
+        comment: ""
+      specCharacteristic.id:
+        condition: ""
+        comment: ""
+      specCharacteristic.isUnique:
+        condition: ""
+        comment: ""
+      specCharacteristic.maxCardinality:
+        condition: ""
+        comment: ""
+      specCharacteristic.minCardinality:
+        condition: ""
+        comment: ""
+      specCharacteristic.name:
+        condition: M
+        comment: ""
+      specCharacteristic.regex:
+        condition: ""
+        comment: ""
+      specCharacteristic.validFor:
+        condition: ""
+        comment: ""
+      specCharacteristic.validFor.endDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.validFor.startDateTime:
+        condition: ""
+        comment: ""
+      specCharacteristic.valueType:
+        condition: M
+        comment: ""
+      validFor:
+        condition: ""
+        comment: ""
+      validFor.endDateTime:
+        condition: ""
+        comment: ""
+      validFor.startDateTime:
+        condition: ""
+        comment: ""
+      version:
+        condition: ""
+        comment: ""
+    operations-details:
+      POST:
+        mandatory:
+          name:
+            rule: ""
+      PATCH:
+        patchable:
+          description:
+            rule: ""
+          lastUpdate:
+            rule: ""
+          lifecycleStatus:
+            rule: ""
+          name:
+            rule: ""
+          relatedParty:
+            rule: ""
+          specCharacteristic:
+            rule: ""
+          validFor:
+            rule: ""
+          version:
+            rule: ""
+        non-patchable:
+          creationDate:
+            rule: ""
+
+  TroubleTicketSpecificationAttributeValueChangeEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketSpecificationCreateEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketSpecificationDeleteEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketSpecificationStatusChangeEvent:
+    condition: ""
+    comment: ""
+
+  TroubleTicketStatusChangeEvent:
+    condition: ""
+    comment: ""

@@ -21,6 +21,7 @@ const productOfferingSchema = new mongoose.Schema(
     giftVolume: Number,
     giftPricePerGB: Number,
     name: { type: String, required: true },
+    lifecycleStatus: String,
     description: { type: String },
     category: { type: String }, // vasAddon grouping, e.g. "Home Schooling & WFH"
 

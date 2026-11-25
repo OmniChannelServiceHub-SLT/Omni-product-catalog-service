@@ -88,12 +88,12 @@ function createGetMyPackageService({
       throw fail(401, "Authentication is required.");
     }
 
-    const allowed = new Set(["subscriberID", "fields", "offset", "limit"]);
+    const allowed = new Set(["subscriberID", "id", "status", "fields", "offset", "limit"]);
 
     if (Object.keys(query).some((key) => !allowed.has(key))) {
       throw fail(
         400,
-        "Supported query parameters: subscriberID, fields, offset, limit.",
+        "Supported query parameters: subscriberID, id, status, fields, offset, limit.",
       );
     }
 
@@ -115,6 +115,13 @@ function createGetMyPackageService({
     }
 
     const subscriberID = query.subscriberID;
+    for (const key of ["id", "status"]) {
+      const value = query[key];
+      if (value !== undefined &&
+          (typeof value !== "string" || !value.trim() || value.length > 128)) {
+        throw fail(400, `${key} must be a nonempty string.`);
+      }
+    }
 
     if (
       subscriberID !== undefined &&
@@ -149,6 +156,13 @@ function createGetMyPackageService({
       subscriberId:
         subscriberID === undefined ? { $in: [...new Set(ids)] } : subscriberID,
     };
+    if (query.status !== undefined) filter.status = query.status;
+    if (query.id !== undefined) {
+      filter.$or = [{ id: query.id }];
+      if (/^[a-fA-F0-9]{24}$/.test(query.id)) {
+        filter.$or.push({ _id: query.id, id: { $exists: false } });
+      }
+    }
 
     const total = await Product.countDocuments(filter);
 

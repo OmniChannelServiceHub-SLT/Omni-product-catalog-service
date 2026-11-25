@@ -1,0 +1,26 @@
+# do not change the service names as they are used in the CI/CD pipelines and .config files
+name: tmf620-v4-ctk
+
+networks:
+  tmf:
+    external: true
+
+services:
+  ctk:
+    image: tmforumorg/tmf620-v4.1.0-ctk:1.0.1
+    container_name: tmf620-v4-ctk
+    platform: linux/amd64
+    volumes:
+      - ./config.json:/config/config.json:ro
+      - ./reports:/app/reports
+    env_file:
+      - .env
+    environment:
+      CTK_TARGET_URL: ${CTK_TARGET_URL:-http://tmf620-ri:8620/r1-productcatalog/tmf-api/partyRoleManagement/v4/}
+      # Proxy settings (optional). Populate via .env
+      # Example: HTTP_PROXY=http://proxy-host:3128
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1,tmf,tmf620-ri}
+    networks:
+      - tmf
