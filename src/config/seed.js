@@ -165,15 +165,38 @@ const advancedReportingPackages = [
   { offeringType: 'advancedReporting', packageId: '2', name: 'Annual Subscription', description: '400 LKR', prePrice: '400', postPrice: '400', taxValue: '40.8128' },
 ];
 
-// ---- dataGift / dataGiftMobile - PLACEHOLDER, no sample response in source sheet ----
-const dataGiftPackages = [
-  { offeringType: 'dataGift', packageId: '1', name: '1 GB Data Gift', description: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
-  { offeringType: 'dataGift', packageId: '2', name: '5 GB Data Gift', description: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
+// Book 18, A57 and A65. Both captures contain the same twelve packages.
+const giftPackages = [
+  [1, 1, '100', '23.49'], [3, 2, '200', '46.98'],
+  [5, 3, '300', '70.47'], [9, 5, '425', '99.8325'],
+  [11, 6, '510', '119.798996'], [13, 7, '595', '139.7655'],
+  [15, 8, '680', '159.732'], [17, 9, '765', '179.6985'],
+  [19, 10, '850', '199.665'], [29, 15, '1275', '299.4975'],
+  [39, 20, '1500', '352.35'], [40, 25, '1875', '440.4375'],
 ];
-const dataGiftPackagesMobile = [
-  { offeringType: 'dataGiftMobile', packageId: '1', name: '1 GB Mobile Data Gift', description: '1 GB', prePrice: '50', postPrice: '50', taxValue: '5.10' },
-  { offeringType: 'dataGiftMobile', packageId: '2', name: '5 GB Mobile Data Gift', description: '5 GB', prePrice: '200', postPrice: '200', taxValue: '20.41' },
-];
+
+function buildGiftOfferings(offeringType) {
+  return giftPackages.map(([id, volume, price, taxValue]) => ({
+    offeringType,
+    packageId: String(id),
+    name: `${volume} GB Data Gift`,
+    prePrice: price,
+    postPrice: price,
+    taxValue,
+    prePaidTax: taxValue,
+    postPaidTax: taxValue,
+    prePaidAllowed: true,
+    postPaidAllowed: true,
+    giftVolume: volume,
+    ...(offeringType === 'dataGiftMobile' && {
+      category: volume <= 3 ? 'standard' : 'beyond',
+      giftPricePerGB: volume <= 3 ? undefined : volume < 20 ? 85 : 75,
+    }),
+  }));
+}
+
+const dataGiftPackages = buildGiftOfferings('dataGift');
+const dataGiftPackagesMobile = buildGiftOfferings('dataGiftMobile');
 
 // ---- myPackage (source: sheet "48", real sample, subscriberID 94382222802) ----
 const myPackageSnapshots = [
@@ -223,7 +246,6 @@ async function seed() {
   console.log(`Seeded ${products.length} TMF637_Product documents.`);
 
   console.log('Done. ADSL broadband package values come from the A104 source sample.');
-  console.log('dataGiftPackages/dataGiftPackagesMobile are placeholder data - no real sample existed in the source sheet.');
 
   await mongoose.disconnect();
 }

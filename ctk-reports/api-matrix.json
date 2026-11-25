@@ -1,0 +1,389 @@
+{
+  "generatedAt": "2026-11-11T04:35:53.216Z",
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "results": [
+    {
+      "id": "A35",
+      "legacyApi": "ProductDetailRequestV2",
+      "uniqueMethod": "retrieveSubscription",
+      "tmfApi": "TMF637",
+      "method": "GET",
+      "path": "/tmf-api/productInventory/v4/product/6af3efb5b8368049a8490e2a",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "id",
+          "href",
+          "name",
+          "productCharacteristic",
+          "@type"
+        ]
+      }
+    },
+    {
+      "id": "A48",
+      "legacyApi": "MyPackage",
+      "uniqueMethod": "getMyPackage",
+      "tmfApi": "TMF637",
+      "method": "GET",
+      "path": "/tmf-api/productInventory/v4/product?subscriberID=94382222802",
+      "statusCode": 200,
+      "resultCount": "1",
+      "totalCount": "1",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 1
+      }
+    },
+    {
+      "id": "A49",
+      "legacyApi": "GetAdvancedReportingPackage",
+      "uniqueMethod": "listOfferingAdv",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=advancedReporting",
+      "statusCode": 200,
+      "resultCount": "2",
+      "totalCount": "2",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 2
+      }
+    },
+    {
+      "id": "A71",
+      "legacyApi": "GetBBPackagesV2",
+      "uniqueMethod": "listProductOffering",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering",
+      "statusCode": 200,
+      "resultCount": "84",
+      "totalCount": "84",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 84
+      }
+    },
+    {
+      "id": "A73",
+      "legacyApi": "GetServiceDetailRequest",
+      "uniqueMethod": "retrieveService",
+      "tmfApi": "TMF638-v5",
+      "method": "GET",
+      "path": "/tmf-api/serviceInventory/v5/service/CTK-VOICE-001",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "id",
+          "href",
+          "@type",
+          "name",
+          "description",
+          "serviceType",
+          "state",
+          "serviceCharacteristic"
+        ]
+      }
+    },
+    {
+      "id": "A74",
+      "legacyApi": "GetBBFreedomStatus",
+      "uniqueMethod": "listProductOrderBb",
+      "tmfApi": "Custom",
+      "method": "GET",
+      "path": "/api/bbFreedomStatus?tpNo=0000000000",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": "Custom endpoint; outside TMF CTK scope.",
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "telephoneNumber",
+          "freedomRequested",
+          "message"
+        ]
+      }
+    },
+    {
+      "id": "A76",
+      "legacyApi": "GetBBPackageDetails",
+      "uniqueMethod": "retrieveOfferingBb",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering/6af3efb5b8368049a8490ded",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "id",
+          "href",
+          "name",
+          "@type",
+          "@baseType",
+          "@schemaLocation",
+          "offeringType",
+          "packageId",
+          "packageType",
+          "packageGroup",
+          "lastUpdate",
+          "productOfferingPrice",
+          "prodSpecCharValueUse"
+        ]
+      }
+    },
+    {
+      "id": "A78",
+      "legacyApi": "GetDashboardVASBundles",
+      "uniqueMethod": "getDashboardVas",
+      "tmfApi": "Custom",
+      "method": "GET",
+      "path": "/api/vasDashboard?subscriberID=cen2431747",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": "Custom endpoint; outside TMF CTK scope.",
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "subscriberId",
+          "packageName",
+          "summary",
+          "usageDetails",
+          "reportedTime"
+        ]
+      }
+    },
+    {
+      "id": "A91",
+      "legacyApi": "GetBBPackageComparison",
+      "uniqueMethod": "listOfferingBbPkg",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=broadbandPackage",
+      "statusCode": 200,
+      "resultCount": "30",
+      "totalCount": "30",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 30
+      }
+    },
+    {
+      "id": "A95",
+      "legacyApi": "CheckCallForwardingStatus",
+      "uniqueMethod": "retrieveServiceStatus",
+      "tmfApi": "TMF638-v5",
+      "method": "GET",
+      "path": "/tmf-api/serviceInventory/v5/service/CTK-VOICE-001",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "id",
+          "href",
+          "@type",
+          "name",
+          "description",
+          "serviceType",
+          "state",
+          "serviceCharacteristic"
+        ]
+      }
+    },
+    {
+      "id": "A99",
+      "legacyApi": "GetCurrentBBPackageV2",
+      "uniqueMethod": "listOfferingCurrentBb",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?packageType=ADSL&name=Web%20Family%20Plus",
+      "statusCode": 200,
+      "resultCount": "1",
+      "totalCount": "1",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 1
+      }
+    },
+    {
+      "id": "A104",
+      "legacyApi": "GetBBPackagesInterim",
+      "uniqueMethod": "getBbPackagesInterim",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?packageType=ADSL",
+      "statusCode": 200,
+      "resultCount": "30",
+      "totalCount": "30",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 30
+      }
+    },
+    {
+      "id": "A105",
+      "legacyApi": "GetPEOPackagesInterim",
+      "uniqueMethod": "getPeoPackages",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=peoPackage&accessType=ADSL",
+      "statusCode": 200,
+      "resultCount": "8",
+      "totalCount": "8",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 8
+      }
+    },
+    {
+      "id": "A106",
+      "legacyApi": "GetVoicePackagesInterim",
+      "uniqueMethod": "getVoicePackages",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=voicePackage&accessType=ADSL",
+      "statusCode": 200,
+      "resultCount": "3",
+      "totalCount": "3",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 3
+      }
+    },
+    {
+      "id": "A119",
+      "legacyApi": "GetAvailableProducts",
+      "uniqueMethod": "listOffering",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=peoVasProduct",
+      "statusCode": 200,
+      "resultCount": "19",
+      "totalCount": "19",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 19
+      }
+    },
+    {
+      "id": "A120",
+      "legacyApi": "GetPurchasedProducts",
+      "uniqueMethod": "listProduct",
+      "tmfApi": "TMF637",
+      "method": "GET",
+      "path": "/tmf-api/productInventory/v4/product?productType=peoVasSubscription&subscriberId=0382222802",
+      "statusCode": 200,
+      "resultCount": "0",
+      "totalCount": "0",
+      "shapeValid": true,
+      "pass": true,
+      "note": "Source sample contains no active subscriptions; empty collection is expected.",
+      "responseSummary": {
+        "type": "array",
+        "length": 0
+      }
+    },
+    {
+      "id": "A62",
+      "legacyApi": "GetVASDataBundlePackages",
+      "uniqueMethod": "listOfferingVas",
+      "tmfApi": "TMF620",
+      "method": "GET",
+      "path": "/tmf-api/productCatalogManagement/v4/productOffering?offeringType=vasAddon",
+      "statusCode": 200,
+      "resultCount": "18",
+      "totalCount": "18",
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "array",
+        "length": 18
+      }
+    },
+    {
+      "id": "A94",
+      "legacyApi": "CallForwardingRequest",
+      "uniqueMethod": "patchService",
+      "tmfApi": "TMF638-v5",
+      "method": "PATCH",
+      "path": "/tmf-api/serviceInventory/v5/service/CTK-VOICE-001",
+      "statusCode": 200,
+      "resultCount": null,
+      "totalCount": null,
+      "shapeValid": true,
+      "pass": true,
+      "note": null,
+      "responseSummary": {
+        "type": "object",
+        "keys": [
+          "id",
+          "href",
+          "@type",
+          "name",
+          "description",
+          "serviceType",
+          "state",
+          "serviceCharacteristic"
+        ]
+      }
+    }
+  ]
+}

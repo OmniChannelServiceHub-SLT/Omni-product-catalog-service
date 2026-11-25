@@ -1,0 +1,238 @@
+{
+  "suite": "TMF637-v4.0",
+  "baseUrl": "http://127.0.0.1:3005/tmf-api/productInventory/v4/",
+  "runnerError": null,
+  "requests": {
+    "total": 8,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 61,
+    "pending": 0,
+    "failed": 44
+  },
+  "testScripts": {
+    "total": 8,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": [
+    {
+      "item": "/Product",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/productInventory/v4/product",
+      "statusCode": 200,
+      "assertionFailures": [
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [] to be a superset of [ Array(8) ]"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has productCharacteristic attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has productPrice attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has relatedParty attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '[]' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '[]' to include undefined"
+        }
+      ]
+    },
+    {
+      "item": "/Product?id={{IDPR01}}",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/productInventory/v4/product?id={{IDPR01}}",
+      "statusCode": 400,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 400"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(8) ]"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has productCharacteristic attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has productPrice attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has relatedParty attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        }
+      ]
+    },
+    {
+      "item": "/Product?id={{STATUSPR01}}",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/productInventory/v4/product?status={{STATUSPR01}}",
+      "statusCode": 400,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 400"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(8) ]"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has productCharacteristic attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has productPrice attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has relatedParty attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        }
+      ]
+    },
+    {
+      "item": "/Product?id={{STATUSPR02}}",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/productInventory/v4/product?status={{STATUSPR02}}",
+      "statusCode": 400,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 400"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(8) ]"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has productCharacteristic attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has productPrice attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has relatedParty attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        }
+      ]
+    },
+    {
+      "item": "/Product?id={{IDPR02}}",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/productInventory/v4/product?id={{IDPR02}}",
+      "statusCode": 400,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 400"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(8) ]"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has productCharacteristic attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has productPrice attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response has relatedParty attribute",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"400\",\"reason\":\"Bad Request\",\"message\":\"Supported query parameters: subscriberID, fields, offset, limit.\",\"status\":\"400\",\"@type\":\"Error\"}' to include undefined"
+        }
+      ]
+    }
+  ]
+}

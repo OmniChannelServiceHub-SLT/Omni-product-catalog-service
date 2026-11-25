@@ -18,6 +18,8 @@ const productOfferingSchema = new mongoose.Schema(
       enum: ['vasAddon', 'broadbandPackage', 'peoPackage', 'voicePackage', 'peoVasProduct', 'dataGift', 'dataGiftMobile', 'advancedReporting'],
     },
     packageId: { type: String, required: true }, // addon id / catalog package id / BB package code
+    giftVolume: Number,
+    giftPricePerGB: Number,
     name: { type: String, required: true },
     description: { type: String },
     category: { type: String }, // vasAddon grouping, e.g. "Home Schooling & WFH"

@@ -266,6 +266,30 @@ function createListOfferingAdvService({ ProductOffering, publicBaseUrl }) {
         "@type": "ProductSpecificationCharacteristicValueUse",
       });
     }
+    if (["dataGift", "dataGiftMobile"].includes(record.offeringType) &&
+        Number.isFinite(record.giftVolume)) {
+      for (const [name, value, unitOfMeasure] of [
+        ["dataVolume", record.giftVolume, "GB"],
+        ["vasPackageType", "VODV"],
+        ["prePaidAllowed", record.prePaidAllowed],
+        ["postPaidAllowed", record.postPaidAllowed],
+        ["prePaidTax", record.prePaidTax],
+        ["postPaidTax", record.postPaidTax],
+        ["pricePerGB", record.giftPricePerGB],
+      ]) {
+        if (value === undefined) continue;
+        characteristics.push({
+          name,
+          valueType: typeof value,
+          productSpecCharacteristicValue: [
+            { value, ...(unitOfMeasure && { unitOfMeasure }) },
+          ],
+        });
+      }
+      result.productOfferingTerm = [
+        { name: "Data gift validity", duration: { amount: 60, units: "days" } },
+      ];
+    }
     if (characteristics.length) result.prodSpecCharValueUse = characteristics;
 
     if (!chosen) return result;

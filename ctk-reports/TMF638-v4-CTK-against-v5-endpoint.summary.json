@@ -1,0 +1,958 @@
+{
+  "suite": "TMF638-v4-CTK-against-v5-endpoint",
+  "baseUrl": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5",
+  "runnerError": null,
+  "requests": {
+    "total": 9,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 263,
+    "pending": 0,
+    "failed": 218
+  },
+  "testScripts": {
+    "total": 9,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": [
+    {
+      "item": "Set ID's if not manually set on the envirionment",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "An array with at least 2 elements is expected to run this tests, if your API can't return an Array, follow the documentation distributed together with this CTK and set the globals IDSI01 and IDSI02 manually",
+          "message": "expected 0 to deeply equal 1"
+        }
+      ]
+    },
+    {
+      "item": "Retrieve a Service by it's ID",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/{{IDSI01}}",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(14) ]"
+        },
+        {
+          "assertion": "Response id attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response href attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response name attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response description attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response state attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response category attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response startDate attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response serviceRelationship attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceRelationship.relationshipType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceRelationship.service attribute is of type object",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceCharacteristic attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceCharacteristic.valueType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingService.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingResource.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceSpecification attribute is of type object",
+          "message": "expected undefined to be an object"
+        },
+        {
+          "assertion": "Response serviceSpecification.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Response serviceSpecification.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Response serviceSpecification.version attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Response relatedParty attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response relatedParty.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.role attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response place.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceRelationship_relationshipType is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceRelationship_service is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceCharacteristic_valueType is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceCharacteristic_value is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingService_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingService_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingResource_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingResource_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceSpecification_id is set",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "serviceSpecification_href is set",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "serviceSpecification_version is set",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "relatedParty_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "relatedParty_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "relatedParty_role is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "place_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "place_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on name",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on description",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on state",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on category",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on startDate",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on serviceRelationship[0].relationshipType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceCharacteristic[0].valueType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.id",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.href",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.version",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].role",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        }
+      ]
+    },
+    {
+      "item": "Retrieve a Service by it's ID 2",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/{{IDSI02}}",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(14) ]"
+        },
+        {
+          "assertion": "Response id attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response href attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response name attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response description attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response state attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response category attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response startDate attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response serviceRelationship attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceRelationship.relationshipType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceRelationship.service attribute is of type object",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceCharacteristic attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceCharacteristic.valueType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingService.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingResource.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceSpecification attribute is of type object",
+          "message": "expected undefined to be an object"
+        },
+        {
+          "assertion": "Response serviceSpecification.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Response serviceSpecification.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Response serviceSpecification.version attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Response relatedParty attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response relatedParty.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.role attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response place.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceRelationship_relationshipType is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceRelationship_service is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceCharacteristic_valueType is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceCharacteristic_value is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingService_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingService_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingResource_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "supportingResource_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "serviceSpecification_id is set",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "serviceSpecification_href is set",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "serviceSpecification_version is set",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "relatedParty_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "relatedParty_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "relatedParty_role is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "place_id is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "place_href is set",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on name",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on description",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on state",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on category",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on startDate",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Service not found.\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on serviceRelationship[0].relationshipType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceCharacteristic[0].valueType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.id",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.href",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.version",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].role",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        }
+      ]
+    },
+    {
+      "item": "Retrieve a list of services by one characteristic",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/?category=",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Array with multiple elements expected as response",
+          "message": "expect.fail()"
+        }
+      ]
+    },
+    {
+      "item": "Retrieve a Filtered List with only one Service",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/?state=",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        }
+      ]
+    },
+    {
+      "item": "Retrieve a Filtered List with only one Service using name",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service?name=",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ Array(14) ]"
+        },
+        {
+          "assertion": "Response id attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response href attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response name attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response description attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response state attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response category attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response startDate attribute is of type string",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response serviceRelationship attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceRelationship.relationshipType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceRelationship.service attribute is of type object",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceCharacteristic attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response serviceCharacteristic.valueType attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingService.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingService.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response supportingResource.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response supportingResource.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response serviceSpecification attribute is of type object",
+          "message": "expected undefined to be an object"
+        },
+        {
+          "assertion": "Response serviceSpecification.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Response serviceSpecification.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Response serviceSpecification.version attribute is of type string",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Response relatedParty attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response relatedParty.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response relatedParty.role attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place attribute is of type array",
+          "message": "expected undefined to be an array"
+        },
+        {
+          "assertion": "Response place.id attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Response place.href attribute is of type string",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on id",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on href",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on name",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on description",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on state",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on category",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on startDate",
+          "message": "expected '{\"code\":\"404\",\"reason\":\"Not Found\",\"message\":\"Route not found: GET /tmf-api/serviceInventory/v5/service?name=\",\"status\":\"404\",\"@type\":\"Error\"}' to include undefined"
+        },
+        {
+          "assertion": "Body includes value held on serviceRelationship[0].relationshipType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceCharacteristic[0].valueType",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingService[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on supportingResource[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.id",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.href",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "Body includes value held on serviceSpecification.version",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on relatedParty[0].role",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].id",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Body includes value held on place[0].href",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SERVICERELATIONSHIP_RELATIONSHIPTYPESI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SERVICERELATIONSHIP_SERVICESI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SERVICECHARACTERISTIC_VALUETYPESI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SERVICECHARACTERISTIC_VALUESI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SUPPORTINGSERVICE_IDSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SUPPORTINGSERVICE_HREFSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SUPPORTINGRESOURCE_IDSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SUPPORTINGRESOURCE_HREFSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "SERVICESPECIFICATION_IDSI is undefined",
+          "message": "Cannot read properties of undefined (reading 'id')"
+        },
+        {
+          "assertion": "SERVICESPECIFICATION_HREFSI is undefined",
+          "message": "Cannot read properties of undefined (reading 'href')"
+        },
+        {
+          "assertion": "SERVICESPECIFICATION_VERSIONSI is undefined",
+          "message": "Cannot read properties of undefined (reading 'version')"
+        },
+        {
+          "assertion": "RELATEDPARTY_IDSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "RELATEDPARTY_HREFSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "RELATEDPARTY_ROLESI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "PLACE_IDSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "PLACE_HREFSI is undefined",
+          "message": "Cannot read properties of undefined (reading '0')"
+        },
+        {
+          "assertion": "Service ID null was not supposed to be returned by this filtered search, you need to have services with 2 different states",
+          "message": "expect.fail()"
+        }
+      ]
+    },
+    {
+      "item": "Filtered fields",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service?fields=name,state",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ 'name', 'state', 'id', 'href' ]"
+        },
+        {
+          "assertion": "Response has name attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has state attribute",
+          "message": "expected undefined to be a string"
+        }
+      ]
+    },
+    {
+      "item": "Filtered search by state and filtered fields",
+      "method": "GET",
+      "url": "http://127.0.0.1:3005/tmf-api/serviceInventory/v5/service/?state=&fields=id,href",
+      "statusCode": 404,
+      "assertionFailures": [
+        {
+          "assertion": "Status code is 200",
+          "message": "expected response to have status code 200 but got 404"
+        },
+        {
+          "assertion": "Instance has all mandatory attributes",
+          "message": "expected [ Array(5) ] to be a superset of [ 'id', 'href' ]"
+        },
+        {
+          "assertion": "Instance has only filtered attributes",
+          "message": "expected 5 to deeply equal 3"
+        },
+        {
+          "assertion": "Response has id attribute",
+          "message": "expected undefined to be a string"
+        },
+        {
+          "assertion": "Response has href attribute",
+          "message": "expected undefined to be a string"
+        }
+      ]
+    }
+  ]
+}

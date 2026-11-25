@@ -232,6 +232,9 @@ app.use(CATALOG_BASE_PATH, createListOfferingRouter(catalogOptions));
 
 app.use(CATALOG_BASE_PATH, createListOfferingVasRouter(catalogOptions));
 
+app.use(CATALOG_BASE_PATH, require("./APIs/listOfferingDataGift/routes/route").createListOfferingDataGiftRouter(catalogOptions));
+app.use(CATALOG_BASE_PATH, require("./APIs/listOfferingDataGiftGift/routes/route").createListOfferingDataGiftGiftRouter(catalogOptions));
+
 // This generic handler also serves listProductOffering requests.
 app.use(CATALOG_BASE_PATH, createListOfferingAdvRouter(catalogOptions));
 
